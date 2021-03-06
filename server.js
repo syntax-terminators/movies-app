@@ -32,7 +32,7 @@ const PORT=process.env.PORT;
 app.get("/",homePageHandler);
 
 // DETAILS PAGE
-app.get("/details",detailsPageHandler);
+app.get("/details/:id",detailsPageHandler);
 
 // LIBRARY PAGE
 app.get("/library",libraryPageHandler);
@@ -40,14 +40,17 @@ app.get("/library",libraryPageHandler);
 // QUIZ PAGE
 app.get("/quiz",quizPageHandler);
 
+
+
 /***************************************************
 *****************HANDLER*****************************
 ****************************************************/
 function homePageHandler(req,res) {
-    res.render("index");
+    getHomePageData(req,res);
 }
 function detailsPageHandler(req,res) {
-    res.render("pages/details");
+    getDetailsData(req,res);
+    //res.render("pages/details");
 }
 function libraryPageHandler(req,res) {
     res.render("pages/library");
@@ -59,6 +62,49 @@ function quizPageHandler(req,res) {
 /***************************************************
 *****************GETTER*****************************
 ****************************************************/
+function getHomePageData(req,res) {
+    let apiUrl='https://api.themoviedb.org/3/movie/popular?';
+    let query={
+        api_key:process.env.MOVIE_API_KEY,
+        language:"en-US",
+        page:1
+    }
+    superAgent
+    .get(apiUrl)
+    .query(query)
+    .then(data=>{
+        var movies=JSON
+        .parse(data.text)
+        .results
+        .map(element=>new Movie(element));
+        console.log(movies)
+        res.render("index",{movies:movies});
+    })
+    .catch(error=>{
+        res.render("error",{"error":error});
+    })
+}
+function getDetailsData(req,res) {
+    let movieId=req.params.id;
+    let apiUrl=`https://api.themoviedb.org/3/movie/${movieId}?`;
+    let query={
+        api_key:process.env.MOVIE_API_KEY,
+        language:"en-US",
+        page:1,
+        append_to_response:"credits"
+    }
+    superAgent
+    .get(apiUrl)
+    .query(query)
+    .then(data=>{
+        var movies=new Movie(JSON.parse(data.text)) ;
+        res.render("index",{movies:movies});
+    })
+    .catch(error=>{
+        res.render("error",{"error":error});
+    })
+}
+
 
 /***************************************************
 *****************HELPER*****************************
