@@ -104,8 +104,9 @@ function getDetailsData(req,res) {
     .get(apiUrl)
     .query(query)
     .then(data=>{
-        var movies=new Movie(JSON.parse(data.text)) ;
-        res.render("index",{movies:movies});
+        var movie=new Movie(JSON.parse(data.text));
+        console.log("movie",movie);
+        res.render("index",{movie:movie});
     })
     .catch(error=>{
         res.render("error",{"error":error});
@@ -126,6 +127,7 @@ function getSearchData(req,res) {
         .results
         .map(element=>new Movie(element));
         console.log(movies)
+        res.render("index",{movies:movies});
         
     })
     .catch(error=>{
