@@ -32,7 +32,7 @@ const PORT=process.env.PORT;
 app.get("/",homePageHandler);
 
 // DETAILS PAGE
-app.get("/details",detailsPageHandler);
+app.get("/details/:id",detailsPageHandler);
 
 // LIBRARY PAGE
 app.get("/library",libraryPageHandler);
@@ -40,14 +40,20 @@ app.get("/library",libraryPageHandler);
 // QUIZ PAGE
 app.get("/quiz",quizPageHandler);
 
+// SEARCH PAGE 
+app.get("/search",searchHandler);
+
+
+
 /***************************************************
 *****************HANDLER*****************************
 ****************************************************/
 function homePageHandler(req,res) {
-    res.render("index");
+    getHomePageData(req,res);
 }
 function detailsPageHandler(req,res) {
-    res.render("pages/details");
+    getDetailsData(req,res);
+    //res.render("pages/details");
 }
 function libraryPageHandler(req,res) {
     res.render("pages/library");
@@ -55,11 +61,81 @@ function libraryPageHandler(req,res) {
 function quizPageHandler(req,res) {
     res.render("pages/quiz");
 }
+function searchHandler(req,res) {
+    getSearchData(req,res)
+}
+
 
 /***************************************************
 *****************GETTER*****************************
 ****************************************************/
+function getHomePageData(req,res) {
+    let apiUrl='https://api.themoviedb.org/3/movie/popular?';
+    let query={
+        api_key:process.env.MOVIE_API_KEY,
+        language:"en-US",
+        page:1
+    }
+    superAgent
+    .get(apiUrl)
+    .query(query)
+    .then(data=>{
+        var movies=JSON
+        .parse(data.text)
+        .results
+        .map(element=>new Movie(element));
+        console.log(movies)
+        res.render("index",{movies:movies});
+    })
+    .catch(error=>{
+        res.render("error",{"error":error});
+    })
+}
+function getDetailsData(req,res) {
+    let movieId=req.params.id;
+    let apiUrl=`https://api.themoviedb.org/3/movie/${movieId}?`;
+    let query={
+        api_key:process.env.MOVIE_API_KEY,
+        language:"en-US",
+        page:1,
+        append_to_response:"credits"
+    }
+    superAgent
+    .get(apiUrl)
+    .query(query)
+    .then(data=>{
+        var movie=new Movie(JSON.parse(data.text));
+        console.log("movie",movie);
+        res.render("index",{movie:movie});
+    })
+    .catch(error=>{
+        res.render("error",{"error":error});
+    })
+}
+function getSearchData(req,res) {
+    console.log(req.body);
+    let apiUrl =`https://api.themoviedb.org/3/search/movie?query='${req.query.query}'`
+    let query={
+        api_key:process.env.MOVIE_API_KEY
+    }
+    superAgent
+    .get(apiUrl)
+    .query(query)
+    .then(data=>{
+        var movies=JSON
+        .parse(data.text)
+        .results
+        .map(element=>new Movie(element));
+        console.log(movies)
+        res.render("index",{movies:movies});
+        
+    })
+    .catch(error=>{
+        console.log(error);
+        res.render("error",{"error":error});
+    })
 
+}
 /***************************************************
 *****************HELPER*****************************
 ****************************************************/
@@ -67,8 +143,17 @@ function quizPageHandler(req,res) {
 /***************************************************
 *****************DATA MODEL*************************
 ****************************************************/
-
+function Movie(movie){
+    this.movieID = movie.id;
+    this.description = movie.overview || 'Not Available';
+    this.title = movie.title || 'Not Available';
+    this.rating = movie.vote_average || 'Not Available';
+    this.poster = "https://image.tmdb.org/t/p/w500" + movie.poster_path || 'Not available';
+    this.date = movie.release_date || 'Not Available';
+}
 
 app.listen(PORT, () => {
     console.log('app is lestining in port ....', PORT);
 });
+
+
