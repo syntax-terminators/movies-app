@@ -40,6 +40,9 @@ app.get("/library",libraryPageHandler);
 // QUIZ PAGE
 app.get("/quiz",quizPageHandler);
 
+// SEARCH PAGE 
+app.get("/search",searchHandler);
+
 
 
 /***************************************************
@@ -58,6 +61,10 @@ function libraryPageHandler(req,res) {
 function quizPageHandler(req,res) {
     res.render("pages/quiz");
 }
+function searchHandler(req,res) {
+    getSearchData(req,res)
+}
+
 
 /***************************************************
 *****************GETTER*****************************
@@ -104,8 +111,29 @@ function getDetailsData(req,res) {
         res.render("error",{"error":error});
     })
 }
+function getSearchData(req,res) {
+    console.log(req.body);
+    let apiUrl =`https://api.themoviedb.org/3/search/movie?query='${req.query.query}'`
+    let query={
+        api_key:process.env.MOVIE_API_KEY
+    }
+    superAgent
+    .get(apiUrl)
+    .query(query)
+    .then(data=>{
+        var movies=JSON
+        .parse(data.text)
+        .results
+        .map(element=>new Movie(element));
+        console.log(movies)
+        
+    })
+    .catch(error=>{
+        console.log(error);
+        res.render("error",{"error":error});
+    })
 
-
+}
 /***************************************************
 *****************HELPER*****************************
 ****************************************************/
