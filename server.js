@@ -106,7 +106,7 @@ function getDetailsData(req,res) {
     .then(data=>{
         var movie=new Movie(JSON.parse(data.text));
         console.log("movie",movie);
-        res.render("index",{movie:movie});
+        res.render("index",{movie:movie});      
     })
     .catch(error=>{
         res.render("error",{"error":error});
