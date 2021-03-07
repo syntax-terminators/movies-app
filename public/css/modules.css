@@ -113,3 +113,26 @@ button {
     justify-content: center;
 } */
 
+/* display cards */
+
+.display-cards{
+    display:flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.movie{
+    padding: 0.5%;
+}
+
+.movie>section>img{
+    max-width: 20vw;
+    max-height: 20vw;
+}
+.movie>section>p{
+    margin: 0 auto;
+    color: whitesmoke;
+    font-size: 2vh;
+    max-width: 12vw;
+    text-align: center;
+}
