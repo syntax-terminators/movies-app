@@ -90,7 +90,7 @@ function getHomePageData(req, res) {
                 .filter(x => {
                     if (req.query.genraId) {//genra id provided
                         if (req.query.genraId !== "all") {//genre id not All
-                            return x.genre_ids.some(x => x == req.query.genraId.split('-')[0]);
+                            return x.genre_ids.some(x => x == req.query.genraId);
                         } return true;
                     } return true;
 
@@ -110,7 +110,7 @@ function getHomePageData(req, res) {
             movies.forEach(element => {
                 console.log(element.date)
             });
-            res.render("index", { movies: movies, genre: req.query.genraId ? req.query.genraId.split('-')[1] : ''});
+            res.render("index", { movies: movies, genre: req.query.genraId ? '' : 'clear', year: req.query.year ? '': 'clear'});
         })
         .catch(error => {
             res.render("error", { "error": error });

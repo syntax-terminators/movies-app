@@ -2,19 +2,13 @@
 <section id="filter">
     <form id = "filterForm" action="/">
         <select name="genraId" id="genre">
-            <option value="genre" disabled selected hidden >
-                <%if(genre && genre!=="all"){%>
-                <%=genre.charAt(0).toUpperCase() + genre.slice(1)%>
-                <%}else{%>
-                Genre
-                <%}%>
-            </option>
+            <option value="genre" disabled selected hidden >Genre</option>
             <option value="all">All</option>
-            <option value="28-action">Action</option>
-            <option value="18-drama">Drama</option>
-            <option value="35-comedy">Comedy</option>
-            <option value="27-horror">Horror</option>
-            <option value="9648-mystery">Mystery</option>
+            <option value="28">Action</option>
+            <option value="18">Drama</option>
+            <option value="35">Comedy</option>
+            <option value="27">Horror</option>
+            <option value="9648">Mystery</option>
         </select>
     
     <select name="year" id="year">
@@ -36,3 +30,8 @@
         <i class="fas fa-search"></i>
     </div>
 </section>
+<% if(genre === 'clear' && year === 'clear'){ %>
+    <script>
+        localStorage.clear()
+    </script>
+<% } %> 
