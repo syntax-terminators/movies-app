@@ -13,13 +13,32 @@
     <%- include('./partial/header') %>
         <main>
             <%- include('./partial/aside') %>
-                <%- include('./partial/filter') %>
+                <section class='container'>
+                    <%- include('./partial/filter') %>
+                        <section class='display-cards'>
+                            <% movies.forEach(movie=> { %>
+                                <a class='movie' href="./details/<%= movie.movieID%>">
+                                <section id="renenderImg" >
+                                    <img src="<%= movie.poster %>" alt="">
+                                    <p>
+                                        <%= movie.title %>
+                                    </p>
 
-
-                
-                
+                                </section>
+                                </a>
+                                <% }) %>
+                        </section>
+                </section>
         </main>
         <script src="https://kit.fontawesome.com/c8e4d183c2.js" crossorigin="anonymous"></script>
+        
+<script>
+    var change = document.getElementById('home11');
+    change.style.backgroundColor="rgb(49, 91, 226)";
+    change.style.color="white";
+    console.log(change);
+</script>
+
 </body>
 
 </html>

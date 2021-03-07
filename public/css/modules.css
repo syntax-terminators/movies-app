@@ -37,7 +37,7 @@ background-color: #23408B;
     color: white;
 }
 .search{
-    width: 80%;
+    width: 20vw;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -113,3 +113,47 @@ button {
     justify-content: center;
 } */
 
+/* display cards */
+
+.display-cards{
+    display:flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.movie{
+    padding: 0.5%;
+}
+
+.movie>section>img{
+    max-width: 20vw;
+    max-height: 20vw;
+}
+.movie>section>p{
+    margin: 0 auto;
+    color: whitesmoke;
+    font-size: 2vh;
+    max-width: 12vw;
+    text-align: center;
+}
+
+/**************************************** active mode */
+.btn {
+  border: none;
+  outline: none;
+  padding: 10px 16px;
+ 
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.active, .btn:hover {
+    background-color: rgb(49, 91, 226);
+    color: white;
+  }
+
+/*******************************  zoom In Image   ***********/
+
+#renenderImg:hover {
+    transform: scale(1.1);
+}

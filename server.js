@@ -93,7 +93,7 @@ function getHomePageData(req,res) {
 }
 function getDetailsData(req,res) {
     let movieId=req.params.id;
-    let apiUrl=`https://api.themoviedb.org/3/movie/${movieId}?`;
+    let apiUrl=`https//api.themoviedb.org/3/movie/${movieId}?`;
     let query={
         api_key:process.env.MOVIE_API_KEY,
         language:"en-US",
@@ -106,7 +106,7 @@ function getDetailsData(req,res) {
     .then(data=>{
         var movie=new Movie(JSON.parse(data.text));
         console.log("movie",movie);
-        res.render("index",{movie:movie});      
+        res.render("index",{movies:movie});      
     })
     .catch(error=>{
         res.render("error",{"error":error});
