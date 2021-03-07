@@ -36,7 +36,7 @@ background-color: #23408B;
 }
 
 #filter>form>select{
-    width:0.4;
+    flex:0.4;
     margin: 0 0.75%;
     background: #2a2b2d;
     color: white;
@@ -140,4 +140,25 @@ button {
     font-size: 2vh;
     max-width: 12vw;
     text-align: center;
+}
+
+/**************************************** active mode */
+.btn {
+  border: none;
+  outline: none;
+  padding: 10px 16px;
+ 
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.active, .btn:hover {
+    background-color: rgb(49, 91, 226);
+    color: white;
+  }
+
+/*******************************  zoom In Image   ***********/
+
+#renenderImg:hover {
+    transform: scale(1.1);
 }
