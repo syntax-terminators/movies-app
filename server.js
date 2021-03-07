@@ -53,7 +53,7 @@ function homePageHandler(req,res) {
 }
 function detailsPageHandler(req,res) {
     getDetailsData(req,res);
-    //res.render("pages/details");
+    
 }
 function libraryPageHandler(req,res) {
     res.render("pages/library");
@@ -85,7 +85,7 @@ function getHomePageData(req,res) {
         .parse(data.text)
         .results
         .map(element=>new Movie(element));
-        console.log(movies)
+        // console.log(movies)
         res.render("index",{movies:movies});
     })
     .catch(error=>{
@@ -93,28 +93,21 @@ function getHomePageData(req,res) {
     })
 }
 function getDetailsData(req,res) {
-    let movieId=req.params.id;
-    let apiUrl=`https//api.themoviedb.org/3/movie/${movieId}?`;
-    let query={
-        api_key:process.env.MOVIE_API_KEY,
-        language:"en-US",
-        page:1,
-        append_to_response:"credits"
-    }
+    let movieId = req.params.id;
+    let url=`https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.MOVIE_API_KEY}&language=en-US&append_to_response=credits`
     superAgent
-    .get(apiUrl)
-    .query(query)
-    .then(data=>{
-        var movie=new Movie(JSON.parse(data.text));
-        console.log("movie",movie);
-        res.render("index",{movies:movie});      
-    })
-    .catch(error=>{
-        res.render("error",{"error":error});
-    })
+        .get(url)
+        .then(data => {
+            var movie = new Movie(JSON.parse(data.text));
+            res.render("pages/details", { movie: movie });
+        })
+        .catch(error => {
+            console.log(error);
+            res.render("error", { "error": error });
+        })
 }
 function getSearchData(req,res) {
-    console.log(req.body);
+    // console.log(req.body);
     let apiUrl =`https://api.themoviedb.org/3/search/movie?query='${req.query.query}'`
     let query={
         api_key:process.env.MOVIE_API_KEY
@@ -127,7 +120,7 @@ function getSearchData(req,res) {
         .parse(data.text)
         .results
         .map(element=>new Movie(element));
-        console.log(movies)
+        // console.log(movies)
         res.render("index",{movies:movies});
         
     })
