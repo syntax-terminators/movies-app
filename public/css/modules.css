@@ -25,16 +25,37 @@ background-color: #23408B;
     display: flex;
     align-items:stretch;
     height: 5vh;
-    margin-left: 2%;
-    background-color: #1A1E30 60%;
-    
+    padding: 0.5%;
+    background: #292D35;
+    width:100%;
 }
 
-
+#filter>select{
+    margin: 0 1%;
+    padding: 0 0.5%;
+    background: #2a2b2d;
+    color: white;
+}
+.search{
+    width: 20vw;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
 .search> input {
-    line-height: 5vh;
+    flex:1;
+    border: 0;
+    height: 100%;
+    padding: 0;
+    padding: 0 2%;
 }
-
+.search>i{
+    width: 10%;
+    justify-content: center;
+    height: 100%;
+    align-items: center;
+    display: inline-flex;
+}
 .logo{
     font-size: 2em;
     padding: 0.5%;
@@ -47,5 +68,12 @@ background-color: #23408B;
 .social-media>*{
     padding: 1% 4%;
     margin: 0 2%;
+}
+.container{
+    width:100%;
+}
+.display-cards{
+    padding:2%;
+
 }
 

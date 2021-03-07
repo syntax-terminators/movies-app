@@ -1,3 +1,6 @@
+*{
+    box-sizing: border-box;
+}
 html,body{
     height:100%;
 }
@@ -8,6 +11,7 @@ body{
 main{
     display: flex;
     flex:1;
+    background-color:#1A1E30;
 }
 header{
     max-height:10vh;
