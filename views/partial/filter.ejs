@@ -2,7 +2,13 @@
 <section id="filter">
     <form id = "filterForm" action="/">
         <select name="genraId" id="genre">
-            <option value="genre" disabled selected hidden >Genre</option>
+            <option value="genre" disabled selected hidden >
+                <%if(genre && genre!=="all"){%>
+                <%=genre%>
+                <%}else{%>
+                Genre
+                <%}%>
+            </option>
             <option value="all">All</option>
             <option value="28">Action</option>
             <option value="18">Drama</option>
