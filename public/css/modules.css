@@ -14,6 +14,25 @@ aside>div>p{
     color:#E5E5E5;
     font-size:1.2em;
     text-align: center;
+    
+}
+
+aside>div:hover {
+background-color: #23408B;
+}
+
+#filter {
+    display: flex;
+    align-items:stretch;
+    height: 5vh;
+    margin-left: 2%;
+    background-color: #1A1E30 60%;
+    
+}
+
+
+.search> input {
+    line-height: 5vh;
 }
 
 .logo{
@@ -29,3 +48,4 @@ aside>div>p{
     padding: 1% 4%;
     margin: 0 2%;
 }
+
