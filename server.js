@@ -76,6 +76,7 @@ function getHomePageData(req,res) {
         language:"en-US",
         page:1
     }
+    console.log('hello')
     superAgent
     .get(apiUrl)
     .query(query)
