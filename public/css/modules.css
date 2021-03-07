@@ -28,11 +28,16 @@ background-color: #23408B;
     padding: 0.5%;
     background: #292D35;
     width:100%;
+    justify-content: space-between;
+}
+#filter>form{
+    display: flex;
+    width: 24vw;
 }
 
-#filter>select{
-    margin: 0 1%;
-    padding: 0 0.5%;
+#filter>form>select{
+    width:0.4;
+    margin: 0 0.75%;
     background: #2a2b2d;
     color: white;
 }

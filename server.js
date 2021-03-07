@@ -69,6 +69,7 @@ function searchHandler(req,res) {
 /***************************************************
 *****************GETTER*****************************
 ****************************************************/
+
 function getHomePageData(req,res) {
     let apiUrl='https://api.themoviedb.org/3/movie/popular?';
     let query={
@@ -130,7 +131,7 @@ function getSearchData(req,res) {
         res.render("index",{movies:movies});
         
     })
-    .catch(error=>{
+    .catch(error=>{                                     
         console.log(error);
         res.render("error",{"error":error});
     })
@@ -150,10 +151,9 @@ function Movie(movie){
     this.rating = movie.vote_average || 'Not Available';
     this.poster = "https://image.tmdb.org/t/p/w500" + movie.poster_path || 'Not available';
     this.date = movie.release_date || 'Not Available';
+
 }
 
 app.listen(PORT, () => {
     console.log('app is lestining in port ....', PORT);
 });
-
-
