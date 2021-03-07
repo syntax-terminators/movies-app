@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,39 +7,13 @@
     <title>Document</title>
     <link rel="stylesheet" href="./css/styles.css">
 </head>
-
 <body>
-    <%- include('./partial/header') %>
-        <main>
-            <%- include('./partial/aside') %>
-                <section class='container'>
-                    <%- include('./partial/filter') %>
-                        <section class='display-cards'>
-                            <% movies.forEach(movie=> { %>
-                                <a class='movie' href="./details/<%= movie.movieID%>">
-                                <section id="renenderImg" >
-                                    <img src="<%= movie.poster %>" alt="">
-                                    <p>
-                                        <%= movie.title %>
-                                    </p>
-
-                                </section>
-                                </a>
-                                <% }) %>
-                        </section>
-                </section>
-        </main>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-        <script src="https://kit.fontawesome.com/c8e4d183c2.js" crossorigin="anonymous"></script>
-        <script src="./js/app.js"></script>
-        
-<script>
-    var change = document.getElementById('home11');
-    change.style.backgroundColor="rgb(49, 91, 226)";
-    change.style.color="white";
-    console.log(change);
-</script>
-
+    <%- include('./partial/header')%>
+    <main>
+        <aside>
+            <%- include('./partial/nav')%> 
+        </aside>
+    </main>
+    <script src="https://kit.fontawesome.com/c8e4d183c2.js" crossorigin="anonymous"></script>
 </body>
-
 </html>
