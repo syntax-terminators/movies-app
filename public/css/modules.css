@@ -37,17 +37,13 @@ background-color: #23408B;
     color: white;
 }
 .search{
-    width: 80%;
+    width: 20vw;
     display: flex;
     justify-content: space-around;
     align-items: center;
 }
 .search> input {
-<<<<<<< HEAD
-   width: 20%;
-=======
-    width:80%;
->>>>>>> 06416c43386df57775f2cb063ed8bdc871ee3ddd
+   width: 80%;
     border: 0;
     height: 100%;
     padding: 0;
