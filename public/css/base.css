@@ -1,19 +1,32 @@
+*{
+    box-sizing: border-box;
+}
+html,body{
+    height:100%;
+}
+body{
+    display: flex;
+    flex-direction: column;
+}
+main{
+    display: flex;
+    flex:1;
+    background-color:#1A1E30;
+}
 header{
-    max-height:7vh;
-    min-height: 7vh;
+    max-height:10vh;
+    min-height: 10vh;
     display:flex;
     flex-direction: column;
     justify-content: center;
     background-color: #2a2b2d;
     color:white;
 }
-nav{
-    display:flex;
-    justify-content: space-between;
-}
-nav>*{
-    display:inline-flex;
+
+a{
+    text-decoration: none;
 }
 h1 {
     color:blue;
 }
+
