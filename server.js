@@ -89,7 +89,7 @@ function getHomePageData(req, res) {
                 .results
                 .filter(x => {
                     if (req.query.genraId) {//genra id provided
-                        if (req.query.genraId !== "All") {//genre id not All
+                        if (req.query.genraId !== "all") {//genre id not All
                             return x.genre_ids.some(x => x == req.query.genraId);
                         } return true;
                     } return true;
@@ -97,8 +97,12 @@ function getHomePageData(req, res) {
                 })
                 .filter(x => {
                     if (req.query.year) {//year  provided
-                        if (req.query.year !== "All") {//year id not All
-                            //solution here
+                        if (req.query.year !== "all") {//year id not All
+                        // console.log(x);
+                        let newObj = new Date(x.release_date)
+                        if (newObj.getFullYear() == req.query.year) {
+                            return true;
+                        }return false;
                         } return true;
                     } return true;
                 })
