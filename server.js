@@ -45,6 +45,8 @@ app.get("/search",searchHandler);
 
 
 
+
+
 /***************************************************
 *****************HANDLER*****************************
 ****************************************************/
@@ -66,10 +68,12 @@ function searchHandler(req,res) {
 }
 
 
+
 /***************************************************
 *****************GETTER*****************************
 ****************************************************/
 function getHomePageData(req,res) {
+    
     let apiUrl='https://api.themoviedb.org/3/movie/popular?';
     let query={
         api_key:process.env.MOVIE_API_KEY,
@@ -80,11 +84,25 @@ function getHomePageData(req,res) {
     .get(apiUrl)
     .query(query)
     .then(data=>{
+        console.log("*******************************HOME********************************")
+        console.log(req.query);//the default val ={} no query provided
+        console.log(JSON
+            .parse(data.text)
+            .results);
         var movies=JSON
         .parse(data.text)
         .results
+        .filter(x=>{
+            if(req.query.genraId){//genra id provided
+                return x.genre_ids.some(x=>x==req.query.genraId);
+            }else{
+            return true;
+            }   
+        })
         .map(element=>new Movie(element));
-        console.log(movies)
+
+        //console.log(movies)
+        
         res.render("index",{movies:movies});
     })
     .catch(error=>{
@@ -136,6 +154,7 @@ function getSearchData(req,res) {
     })
 
 }
+
 /***************************************************
 *****************HELPER*****************************
 ****************************************************/
