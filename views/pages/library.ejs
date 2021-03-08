@@ -17,20 +17,20 @@
         <main>
             <%- include('../partial/aside') %>
                 <section class='container'>
-                        <section class='display-cards'>
-                            <% moviesList.forEach(movie=> { %>
+                    <section class='display-cards'>
+                        <% moviesList.forEach(movie=> { %>
 
-                                <a class='movie' href="../details2/<%= movie.id%>">
-                                    <section id="renenderImg">
-                                        <img src="<%= movie.poster %>" alt="">
-                                        <p>
-                                            <%= movie.title %>
-                                        </p>
+                            <a class='movie' href="../details2/<%= movie.id%>">
+                                <section id="renenderImg">
+                                    <img src="<%= movie.poster %>" alt="">
+                                    <p>
+                                        <%= movie.title %>
+                                    </p>
 
-                                    </section>
-                                </a>
-                                <% }) %>
-                        </section>
+                                </section>
+                            </a>
+                            <% }) %>
+                    </section>
                 </section>
         </main>
         <%- include('../partial/scripts') %>

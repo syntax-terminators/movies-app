@@ -16,7 +16,7 @@
     <%- include('../partial/header')%>
         <main>
             <%- include('../partial/aside')%>
-                
+
 
                 <section class="all" id="all">
                     <section class="container">
@@ -24,31 +24,31 @@
                             <p> Details</p>
                         </section>
                     </section>
-                    <section  id="display" >
+                    <section id="display">
 
                         <section id="cont">
                             <img class="singleImg" src=" <%=movie.poster %>" alt="">
                             <h2>
                                 <%=movie.title %>
-                                <hr style="width:50%;text-align:left;margin-left:0">
+                                    <hr style="width:50%;text-align:left;margin-left:0">
 
                             </h2>
 
                             <h2>
                                 <%=movie.description %>
-                                <hr style="width:50%;text-align:left;margin-left:0">
+                                    <hr style="width:50%;text-align:left;margin-left:0">
 
                             </h2>
 
                             <h2>
                                 <%=movie.rating %>
-                                <hr style="width:50%;text-align:left;margin-left:0">
+                                    <hr style="width:50%;text-align:left;margin-left:0">
 
                             </h2>
 
                             <h2>
                                 <%=movie.date %>
-                                <hr style="width:50%;text-align:left;margin-left:0">
+                                    <hr style="width:50%;text-align:left;margin-left:0">
 
                             </h2>
 
@@ -58,23 +58,26 @@
 
                         </section>
 
-                        <section class = 'display-actors'>
-                        <section class = 'actors-container'>
+                        <section class='display-actors'>
+                            <section class='actors-container'>
 
-                            <% actors.forEach(actor => { %>
+                                <% actors.forEach(actor=> { %>
 
-                                <ul>
-                                    <li><img src="<%= actor.image %>" alt=""></li>
-                                    <li><%= actor.name %> </li>
-                                </ul>
-                            <% }) %>
+                                    <ul>
+                                        <li><img src="<%= actor.image %>" alt=""></li>
+                                        <li>
+                                            <%= actor.name %>
+                                        </li>
+                                    </ul>
+                                    <% }) %>
+                            </section>
+
+
+
                         </section>
 
-
-
-                        </section>
-
-                        <form style="text-align: center;"  action="<%=`/delete/${movie.id}?_method=DELETE`%>" method="POST">
+                        <form style="text-align: center;" action="<%=`/delete/${movie.id}?_method=DELETE`%>"
+                            method="POST">
                             <button id="Button" type="submit"> DELETE MOVIE </button>
                         </form>
                         <br>
@@ -85,11 +88,11 @@
                         </button> -->
                     </section>
 
-               
-                
-              
 
-                <%- include('../partial/scripts') %>
+
+
+
+                    <%- include('../partial/scripts') %>
 
         </main>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"
@@ -98,8 +101,8 @@
         <script src="./js/app.js"></script>
         <script>
             var change = document.getElementById('details11');
-            change.style.backgroundColor="rgb(49, 91, 226)";
-            change.style.color="white";
+            change.style.backgroundColor = "rgb(49, 91, 226)";
+            change.style.color = "white";
             console.log(change);
         </script>
 </body>

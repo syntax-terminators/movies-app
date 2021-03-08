@@ -71,7 +71,6 @@ function homePageHandler(req, res) {
 }
 function detailsPageHandler(req, res) {
     getDetailsData(req, res);
-    //res.render("pages/details");
 }
 function libraryPageHandler(req, res) {
     renderMovies(req, res);
@@ -89,7 +88,6 @@ function topHandler(req, res) {
     getTopData(req, res);
 }
 function addMoviesHandler(req, res) {
-    // console.log('hello');
     saveMovies(req, res);
 }
 function details2PageHandler(req, res) {
@@ -234,6 +232,11 @@ function getTopData(req, res) {
         });
 
 }
+
+
+/***************************************************
+*****************HELPER*****************************
+****************************************************/
 function saveMovies(req, res) {
     let SQL = `INSERT INTO movie(id,title, date, rating, poster, description) VALUES ($1, $2, $3, $4, $5, $6)`
     let reqBody = req.body;
@@ -241,16 +244,12 @@ function saveMovies(req, res) {
 
     client.query(SQL, values)
         .then((data) => {
-            // console.log(data);
-            // res.redirect('./library');
-
             let actorsjson = JSON.parse(req.body.actors);
             actorsjson.forEach(actor=>{
             let values2 = [actor.poster,actor.name,reqBody.movieID];
             let SQL2 = `INSERT INTO actors(image, name, moviesid) VALUES ($1, $2, $3)`
             client.query(SQL2, values2)
                 .then((data) => {
-                    // console.log(data);
                 }).catch(error => {
                     console.log(error);
                     res.render("error", { error: error });
@@ -264,19 +263,13 @@ function saveMovies(req, res) {
         });
 
 
-        // console.log(JSON.parse(req.body.actors));
 
 }
-
-
-
-
 
 function renderMovies(req, res) {
     let SQL = `SELECT * FROM movie;`;
     client.query(SQL)
         .then(data => {
-            // console.log(data.rows);
             res.render('pages/library', { moviesList: data.rows });
         }).catch(error => {
             console.log(error);
@@ -290,8 +283,6 @@ function getDetails2Data(req, res) {
     let values = [id];
     client.query(SQL, values)
         .then(data => {
-            // console.log(data.rows)
-            // res.render("pages/details2", { movie: data.rows[0]});
             let SQL2 = `SELECT * FROM actors WHERE moviesid=$1`;
             client.query(SQL2, values).then(data2 => {
                 res.render("pages/details2", { movie: data.rows[0],actors:data2.rows});
@@ -324,11 +315,6 @@ function getDelete(req, res){
         });
 
 }
-
-/***************************************************
-*****************HELPER*****************************
-****************************************************/
-
 /***************************************************
 *****************DATA MODEL*************************
 ****************************************************/
@@ -347,9 +333,7 @@ function Actor(actor){
     this.poster = actor.profile_path ? ("https://image.tmdb.org/t/p/w500" + actor.profile_path) : '../img/default-poster.png'
 }
 
-// app.listen(PORT, () => {
-//     console.log('app is lestining in port ....', PORT);
-// });
+
 client.connect().then((data) => {
     app.listen(PORT, () => {
       console.log('the app is listening to ' + PORT);
