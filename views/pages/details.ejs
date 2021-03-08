@@ -51,8 +51,18 @@
                                 <hr style="width:50%;text-align:left;margin-left:0">
 
                             </h2>
-
-        
+                            sec   
+                        </section>
+                        <section class = 'display-actors'>
+                            <section class = 'actors-container'>
+                                <% actors.forEach(actor => { %>
+                                    <ul>
+                                        <li><img src="<%= actor.poster %>" alt=""></li>
+                                        <li><%= actor.name %> </li>
+                                    </ul>
+                                <% }) %>
+                            </section>
+                           
                         </section>
                         <!-- <button id="add">
                             Add to library

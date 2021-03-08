@@ -143,6 +143,7 @@ function getDetailsData(req, res) {
                 let actors=JSON.parse(data.text).credits.cast;
                 actors.length=10;
                 console.log(actors)
+                actors = actors.map(actor => new Actor(actor));
                 res.render("pages/details", { movie: movie,actors:actors });
             })
             .catch(error=>{
@@ -228,14 +229,14 @@ function Movie(movie) {
     this.description = movie.overview || 'Not Available';
     this.title = movie.title || 'Not Available';
     this.rating = movie.vote_average || 'Not Available';
-    if(movie.poster_path){
-        this.poster = "https://image.tmdb.org/t/p/w500" + movie.poster_path;
-    } else{
-        this.poster = '../img/default-poster.png'
-    }
-    
+    this.poster = movie.poster_path ? "https://image.tmdb.org/t/p/w500" + movie.poster_path : '../img/default-poster.png'
     this.date = movie.release_date || 'Not Available';
 
+}
+function Actor(actor){
+    this.name = actor.name;
+    this.character = actor.character;
+    this.poster = actor.profile_path ? ("https://image.tmdb.org/t/p/w500" + actor.profile_path) : '../img/default-poster.png'
 }
 
 app.listen(PORT, () => {

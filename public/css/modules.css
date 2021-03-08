@@ -192,6 +192,27 @@ background-color: #23408B;
   cursor: pointer;
 } */
 /* details */
+
 .all{
     width:100%;
+}
+#display {
+    display: flex;
+    flex-direction: column;
+}
+.display-actors{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding:5%;
+}
+.display-actors>section>ul {
+    padding: 2%;
+    margin: 0.25%;
+    text-align: center;
+}
+section.display-actors>section>ul>li>img {
+    width: 10vw;
+    height: 10vw;
+    border-radius: 100%;
 }
