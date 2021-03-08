@@ -52,11 +52,30 @@
 
                             </h2>
 
-                            <form  action="<%=`/delete/${movie.id}?_method=DELETE`%>" method="POST">
-                                <button id="Button" type="submit"> DELETE MOVIE </button>
-                            </form>
+
+
+
 
                         </section>
+
+
+                        <section class = 'actors-container'>
+
+                            <% actors.forEach(actor => { %>
+
+                                <ul>
+                                    <li><img src="<%= actor.image %>" alt=""></li>
+                                    <li><%= actor.name %> </li>
+                                </ul>
+                            <% }) %>
+                        </section>
+
+
+                        <form  action="<%=`/delete/${movie.id}?_method=DELETE`%>" method="POST">
+                            <button id="Button" type="submit"> DELETE MOVIE </button>
+                        </form>
+
+
                         <!-- <button id="add">
                             Add to library
                         </button> -->

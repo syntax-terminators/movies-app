@@ -159,8 +159,8 @@ function getDetailsData(req, res) {
             .get(apiUrl)
             .then(data=>{
                 let actors=JSON.parse(data.text).credits.cast;
-                actors.length=10;
-                console.log(actors)
+                if(actors.length>10)actors.length=10;
+                // console.log(actors)
                 actors = actors.map(actor => new Actor(actor));
                 res.render("pages/details", { movie: movie,actors:actors });
             })
@@ -235,21 +235,43 @@ function getTopData(req, res) {
 
 }
 function saveMovies(req, res) {
-    let SQL = `INSERT INTO movie(id,title, date, rating, poster, description) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`
+    let SQL = `INSERT INTO movie(id,title, date, rating, poster, description) VALUES ($1, $2, $3, $4, $5, $6)`
     let reqBody = req.body;
     let values = [reqBody.movieID,reqBody.title, reqBody.date, reqBody.rating, reqBody.poster, reqBody.description];
 
     client.query(SQL, values)
         .then((data) => {
             // console.log(data);
-            res.redirect('./library');
+            // res.redirect('./library');
+
+            let actorsjson = JSON.parse(req.body.actors);
+            actorsjson.forEach(actor=>{
+            let values2 = [actor.poster,actor.name,reqBody.movieID];
+            let SQL2 = `INSERT INTO actors(image, name, moviesid) VALUES ($1, $2, $3)`
+            client.query(SQL2, values2)
+                .then((data) => {
+                    // console.log(data);
+                }).catch(error => {
+                    console.log(error);
+                    res.render("error", { error: error });
+                });
+        
+            }); res.redirect('/library');
+
         }).catch(error => {
             console.log(error);
             res.render("error", { error: error });
-
-
         });
+
+
+        // console.log(JSON.parse(req.body.actors));
+
 }
+
+
+
+
+
 function renderMovies(req, res) {
     let SQL = `SELECT * FROM movie;`;
     client.query(SQL)
@@ -261,6 +283,7 @@ function renderMovies(req, res) {
             res.render("error", { error: error });
         });
 }
+
 function getDetails2Data(req, res) {
     let SQL = `SELECT * FROM movie WHERE id=$1`;
     let id = req.params.id;
@@ -268,21 +291,38 @@ function getDetails2Data(req, res) {
     client.query(SQL, values)
         .then(data => {
             // console.log(data.rows)
-            res.render("pages/details2", { movie: data.rows[0]});
+            // res.render("pages/details2", { movie: data.rows[0]});
+            let SQL2 = `SELECT * FROM actors WHERE moviesid=$1`;
+            client.query(SQL2, values).then(data2 => {
+                res.render("pages/details2", { movie: data.rows[0],actors:data2.rows});
+            });
         }).catch(error => {
             console.log(error);
             res.render("error", { error: error });
         });
 }
 function getDelete(req, res){
-    let SQL = 'DELETE FROM movie WHERE id=$1';
-    let values = [req.params.movie_id];
-    client.query(SQL, values)
-        .then(res.redirect('../library'))
+
+        let values = [req.params.movie_id];
+        let SQL2 = 'DELETE FROM actors WHERE moviesid=$1';
+        client.query(SQL2, values)
+        .then(data=>{
+            let SQL = 'DELETE FROM movie WHERE id=$1';
+            client.query(SQL, values)
+                .then(data=>{
+                    
+                    res.redirect('../library')
+                })
+                .catch(error => {
+                    console.log(error);
+                    res.render("error", { error: error });
+                });
+        })
         .catch(error => {
             console.log(error);
             res.render("error", { error: error });
         });
+
 }
 
 /***************************************************

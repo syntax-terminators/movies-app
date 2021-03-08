@@ -50,18 +50,34 @@
                                 <%=movie.date %>
                                 <hr style="width:50%;text-align:left;margin-left:0">
 
-                            </h2>
-                            sec   
+                            </h2>   
                         </section>
                         <section class = 'display-actors'>
                             <section class = 'actors-container'>
+
+                                <% var actorsImages=[] %>
+                                <% var actorsNames=[] %>
                                 <% actors.forEach(actor => { %>
+                                <% actorsImages.push(actor.poster) %>
+                                <% actorsNames.push(actor.name) %>
+
                                     <ul>
                                         <li><img src="<%= actor.poster %>" alt=""></li>
                                         <li><%= actor.name %> </li>
                                     </ul>
                                 <% }) %>
                             </section>
+                            <form action="/add" method="POST">
+                                <input type="text" value="<%=movie.title %>" name="title"  hidden>
+                                <input type="text" value="<%=movie.description %>" name="description"  hidden>
+                                <input type="text" value="<%=movie.rating %>" name="rating"  hidden>
+                                <input type="text" value="<%=movie.date %>" name="date"  hidden>
+                                <input type="text" value="<%=movie.movieID %>" name="movieID"  hidden>
+                                <input type="text" value="<%=movie.poster %>" name="poster"  hidden>
+                                <input type="text" value="<%=JSON.stringify(actors) %>" name="actors"  hidden>
+                                <input type="submit" value="add">
+        
+                            </form>
                            
                         </section>
                         <!-- <button id="add">
@@ -71,16 +87,7 @@
 
                 </section>
                 <section>
-                    <form action="/add" method="POST">
-                        <input type="text" value="<%=movie.title %>" name="title"  hidden>
-                        <input type="text" value="<%=movie.description %>" name="description"  hidden>
-                        <input type="text" value="<%=movie.rating %>" name="rating"  hidden>
-                        <input type="text" value="<%=movie.date %>" name="date"  hidden>
-                        <input type="text" value="<%=movie.movieID %>" name="movieID"  hidden>
-                        <input type="text" value="<%=movie.poster %>" name="poster"  hidden>
-                        <input type="submit" value="add">
 
-                    </form>
                 </section>
                
                 
