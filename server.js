@@ -169,10 +169,10 @@ function getTopData(req,res) {
     .get(apiUrl)
     .then(data=>{
         let movies=JSON.parse(data.text).results;
-        movies.map(x=>{
+        movies = movies.map(x=>{
             return new Movie(x);
         });
-        res.render("pages/top",{movies:movies});
+        res.render("pages/top", {movies:movies, genre: req.query.genraId ? '' : 'clear', year: req.query.year ? '': 'clear'});
     })
     .catch(error=>{
         console.log(error);
