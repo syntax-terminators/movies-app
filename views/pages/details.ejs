@@ -8,6 +8,7 @@
     <title>Document</title>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Open+Sans&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/styles.css">
 </head>
 
@@ -27,14 +28,18 @@
                     <section  id="display" >
 
                         <section id="cont">
-                            <img class="singleImg" src="<%= movie.poster %>" alt="">
+                            <div class = "movie-image">
+                                <img class="singleImg" src="<%= movie.poster %>" alt="">
+                                
+    
+                               
+                                
+                            </div>
+                            
                             <div class="movie-info">
-                            <h2>
-                                <span class="movie-info-span">
-                                Title&nbsp;:&nbsp;
-                            </span>
+                            <h2 class = 'movie-title'>
                                 <%=movie.title %>
-                                <hr style="width:50%;text-align:left;margin-left:0">
+                                <hr style="text-align:left;margin-left:0">
 
                             </h2>
 
@@ -43,26 +48,18 @@
                                 Description&nbsp;:&nbsp;
                             </span>
                                 <%=movie.description %>
-                                <hr style="width:50%;text-align:left;margin-left:0">
-
                             </h2>
-
-                            <h2>
-                                <span class="movie-info-span">
-                                Rating&nbsp;:&nbsp;
-                            </span>
-                                <%=movie.rating %>
-                                <hr style="width:50%;text-align:left;margin-left:0">
-
-                            </h2>
-
                             <h2>
                                 <span class="movie-info-span">
                                 Date&nbsp;:&nbsp;
                             </span>
                                 <%=movie.date %>
-                                <hr style="width:50%;text-align:left;margin-left:0">
-
+                            </h2>
+                            <h2>
+                                <span class="movie-info-span">
+                                Rating&nbsp;:&nbsp;
+                            </span>
+                                <%=movie.rating %>
                             </h2>
                         </div>
                             

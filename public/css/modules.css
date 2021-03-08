@@ -400,9 +400,16 @@ section.display-actors>section>ul p{
     margin-left: 16px;
     justify-content: space-between;
     color: white;
+    max-height: 60vh;
 }
 .movie-info-span{
     color: #ff5050;
+}
+.movie-title{
+    font-family: 'Abril Fatface', cursive;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 5vw;
+    text-align: center;
 }
 
 /* header */
