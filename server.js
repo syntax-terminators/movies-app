@@ -116,23 +116,17 @@ function getHomePageData(req, res) {
             res.render("error", { "error": error });
         })
 }
-function getDetailsData(req, res) {
+function getDetailsData(req,res) {
     let movieId = req.params.id;
-    let apiUrl = `https//api.themoviedb.org/3/movie/${movieId}?`;
-    let query = {
-        api_key: process.env.MOVIE_API_KEY,
-        language: "en-US",
-        page: 1,
-        append_to_response: "credits"
-    }
+    let url=`https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.MOVIE_API_KEY}&language=en-US&append_to_response=credits`
     superAgent
-        .get(apiUrl)
-        .query(query)
+        .get(url)
         .then(data => {
             var movie = new Movie(JSON.parse(data.text));
-            res.render("index", { movies: movie });
+            res.render("pages/details", { movie: movie });
         })
         .catch(error => {
+            console.log(error);
             res.render("error", { "error": error });
         })
 }
