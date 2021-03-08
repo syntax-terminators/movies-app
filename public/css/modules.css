@@ -63,8 +63,10 @@ background-color: #23408B;
     display: inline-flex;
 }
 .logo{
-    font-size: 2em;
-    padding: 0.5%;
+    font-size: 2em;  
+}
+.logo>img{
+    max-height: 10vh;
 }
 .social-media{
     width: 20vw;
@@ -401,4 +403,9 @@ section.display-actors>section>ul p{
 }
 .movie-info-span{
     color: #ff5050;
+}
+
+/* header */
+#brandLogo{
+    background: url('../img/CodeFlixLogo.png')
 }
