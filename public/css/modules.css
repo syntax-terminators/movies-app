@@ -1,16 +1,17 @@
 nav>*{
     display:inline-flex;
 }
-aside>div{
+aside>a>div{
     display: inline-flex;
     flex-direction: column;
     align-items: center;
     box-sizing: border-box;
+    width:100%;
 }
-aside>div>*{
+aside>a>div>*{
     padding:7%;
 }
-aside>div>p{
+aside>a>div>p{
     color:#E5E5E5;
     font-size:1.2em;
     text-align: center;
