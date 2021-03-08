@@ -50,6 +50,9 @@ app.get("/about", aboutHandler);
 app.get("/top", topHandler);
 
 
+
+
+
 /***************************************************
 *****************HANDLER*****************************
 ****************************************************/
@@ -74,8 +77,8 @@ function aboutHandler(req, res) {
 }
 function topHandler(req, res) {
     getTopData(req, res);
-
 }
+
 
 
 
@@ -103,7 +106,6 @@ function getHomePageData(req, res) {
                             return x.genre_ids.some(x => x == req.query.genraId);
                         } return true;
                     } return true;
-
                 })
                 .filter(x => {
                     if (req.query.year) {//year  provided
@@ -118,7 +120,7 @@ function getHomePageData(req, res) {
                 })
                 .map(element => new Movie(element));
             movies.forEach(element => {
-                console.log(element.date)
+                //console.log(element.date)
             });
             res.render("index", { movies: movies, genre: req.query.genraId ? '' : 'clear', year: req.query.year ? '' : 'clear' });
         })
@@ -133,7 +135,20 @@ function getDetailsData(req, res) {
         .get(url)
         .then(data => {
             var movie = new Movie(JSON.parse(data.text));
-            res.render("pages/details", { movie: movie });
+            let movieId =req.params.id;
+            let apiUrl=`https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.MOVIE_API_KEY}&language=en-US&append_to_response=credits`
+            superAgent
+            .get(apiUrl)
+            .then(data=>{
+                let actors=JSON.parse(data.text).credits.cast;
+                actors.length=10;
+                console.log(actors)
+                res.render("pages/details", { movie: movie,actors:actors });
+            })
+            .catch(error=>{
+                res.render("error",{error:error})
+            });
+            
         })
         .catch(error => {
             console.log(error);
