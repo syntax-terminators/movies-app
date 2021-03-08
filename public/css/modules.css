@@ -1,16 +1,17 @@
 nav>*{
     display:inline-flex;
 }
-aside>div{
+aside>a>div{
     display: inline-flex;
     flex-direction: column;
     align-items: center;
     box-sizing: border-box;
+    width:100%;
 }
-aside>div>*{
+aside>a>div>*{
     padding:7%;
 }
-aside>div>p{
+aside>a>div>p{
     color:#E5E5E5;
     font-size:1.2em;
     text-align: center;
@@ -190,3 +191,28 @@ background-color: #23408B;
   margin: 4px 2px;
   cursor: pointer;
 } */
+/* details */
+
+.all{
+    width:100%;
+}
+#display {
+    display: flex;
+    flex-direction: column;
+}
+.display-actors{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding:5%;
+}
+.display-actors>section>ul {
+    padding: 2%;
+    margin: 0.25%;
+    text-align: center;
+}
+section.display-actors>section>ul>li>img {
+    width: 10vw;
+    height: 10vw;
+    border-radius: 100%;
+}

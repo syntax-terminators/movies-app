@@ -18,7 +18,7 @@
             <%- include('../partial/aside')%>
                 
 
-                <section id="all">
+                <section class="all">
                     <section class="container">
                         <section id="f">
                             <p> Details</p>
@@ -27,7 +27,7 @@
                     <section  id="display" >
 
                         <section id="cont">
-                            <img class="singleImg" src=" <%=movie.poster %>" alt="">
+                            <img class="singleImg" src="<%= movie.poster %>" alt="">
                             <h2>
                                 <%=movie.title %>
                                 <hr style="width:50%;text-align:left;margin-left:0">
@@ -51,8 +51,18 @@
                                 <hr style="width:50%;text-align:left;margin-left:0">
 
                             </h2>
-
-        
+                            sec   
+                        </section>
+                        <section class = 'display-actors'>
+                            <section class = 'actors-container'>
+                                <% actors.forEach(actor => { %>
+                                    <ul>
+                                        <li><img src="<%= actor.poster %>" alt=""></li>
+                                        <li><%= actor.name %> </li>
+                                    </ul>
+                                <% }) %>
+                            </section>
+                           
                         </section>
                         <!-- <button id="add">
                             Add to library
