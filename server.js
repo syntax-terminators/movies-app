@@ -153,7 +153,7 @@ function getSearchData(req, res) {
                 .parse(data.text)
                 .results
                 .map(element => new Movie(element));
-            res.render("index", { movies: movies });
+            res.render("index", { movies: movies, genre: req.query.genraId ? '' : 'clear', year: req.query.year ? '' : 'clear' });
 
         })
         .catch(error => {
@@ -213,7 +213,12 @@ function Movie(movie) {
     this.description = movie.overview || 'Not Available';
     this.title = movie.title || 'Not Available';
     this.rating = movie.vote_average || 'Not Available';
-    this.poster = "https://image.tmdb.org/t/p/w500" + movie.poster_path || 'Not available';
+    if(movie.poster_path){
+        this.poster = "https://image.tmdb.org/t/p/w500" + movie.poster_path;
+    } else{
+        this.poster = '../img/default-poster.png'
+    }
+    
     this.date = movie.release_date || 'Not Available';
 
 }
