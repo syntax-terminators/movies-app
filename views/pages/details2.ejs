@@ -18,7 +18,7 @@
             <%- include('../partial/aside')%>
                 
 
-                <section id="all">
+                <section class="all" id="all">
                     <section class="container">
                         <section id="f">
                             <p> Details</p>
@@ -58,7 +58,7 @@
 
                         </section>
 
-
+                        <section class = 'display-actors'>
                         <section class = 'actors-container'>
 
                             <% actors.forEach(actor => { %>
@@ -71,10 +71,14 @@
                         </section>
 
 
-                        <form  action="<%=`/delete/${movie.id}?_method=DELETE`%>" method="POST">
+
+                        </section>
+
+                        <form style="text-align: center;"  action="<%=`/delete/${movie.id}?_method=DELETE`%>" method="POST">
                             <button id="Button" type="submit"> DELETE MOVIE </button>
                         </form>
-
+                        <br>
+                        <br>
 
                         <!-- <button id="add">
                             Add to library
