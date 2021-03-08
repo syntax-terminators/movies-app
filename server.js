@@ -43,8 +43,11 @@ app.get("/quiz", quizPageHandler);
 // SEARCH PAGE 
 app.get("/search", searchHandler);
 
+// ABOUT PAGE
+app.get("/about", aboutHandler);
 
-
+// TOP PAGE
+app.get("/top", topHandler);
 
 
 /***************************************************
@@ -65,6 +68,13 @@ function quizPageHandler(req, res) {
 }
 function searchHandler(req, res) {
     getSearchData(req, res)
+}
+function aboutHandler(req,res) {
+    res.render("pages/about")
+}
+function topHandler(req,res) {
+    getTopData(req,res);
+    
 }
 
 
@@ -151,6 +161,24 @@ function getSearchData(req, res) {
             res.render("error", { "error": error });
         })
 
+}
+function getTopData(req,res) {
+
+    let apiUrl=`https://api.themoviedb.org/3/movie/top_rated?api_key=${process.env.MOVIE_API_KEY}&language=en-US&page=1`;
+    superAgent
+    .get(apiUrl)
+    .then(data=>{
+        let movies=JSON.parse(data.text).results;
+        movies.map(x=>{
+            return new Movie(x);
+        });
+        res.render("pages/top",{movies:movies});
+    })
+    .catch(error=>{
+        console.log(error);
+        res.render("error",{error:error});
+    });
+    
 }
 
 /***************************************************
