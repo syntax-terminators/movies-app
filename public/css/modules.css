@@ -203,16 +203,29 @@ background-color: #23408B;
 .display-actors{
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
-    padding:5%;
+    /* justify-content: center; */
+    padding: 6%;
 }
 .display-actors>section>ul {
     padding: 2%;
-    margin: 0.25%;
+    margin: 1%;
     text-align: center;
+}
+.actors-container{
+    display: flex;
+    background: #cecaca;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    
 }
 section.display-actors>section>ul>li>img {
     width: 10vw;
     height: 10vw;
     border-radius: 100%;
+}
+section.display-actors>section>ul p{
+    line-height:5vh;
+    color: #2f2f2f;
+    font-size: 1.25em;
+    max-width:20vw;
 }
