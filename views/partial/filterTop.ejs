@@ -25,10 +25,10 @@
         <option value="2012">2012</option>
     </select>
     </form>
-    <div class="search">
-        <input type="text" placeholder="Find Your favorite Movies" />
+    <form class="search" action = './search'>
+        <input name = 'query' type="text" placeholder="Search..." />
         <i class="fas fa-search"></i>
-    </div>
+    </form>
 </section>
 <% if(genre === 'clear' && year === 'clear'){ %>
     <script>
