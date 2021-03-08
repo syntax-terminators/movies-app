@@ -63,8 +63,10 @@ background-color: #23408B;
     display: inline-flex;
 }
 .logo{
-    font-size: 2em;
-    padding: 0.5%;
+    font-size: 2em;  
+}
+.logo>img{
+    max-height: 10vh;
 }
 .social-media{
     width: 20vw;
@@ -168,7 +170,7 @@ background-color: #23408B;
 }
 
 #display > #cont {
-    
+    display: flex;
     margin: 10px;
     padding: 20px;
     font-size: 30px;
@@ -430,4 +432,20 @@ section.display-actors>section>ul p{
     color: #2f2f2f;
     font-size: 1.25em;
     max-width:20vw;
+}
+
+.movie-info{
+    display: flex;
+    flex-direction: column;
+    margin-left: 16px;
+    justify-content: space-between;
+    color: white;
+}
+.movie-info-span{
+    color: #ff5050;
+}
+
+/* header */
+#brandLogo{
+    background: url('../img/CodeFlixLogo.png')
 }
