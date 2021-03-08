@@ -9,7 +9,7 @@ movie(
   date VARCHAR(256) NOT NULL,
   rating VARCHAR(256) NOT NULL,
   poster VARCHAR(256) NOT NULL,
-  description VARCHAR(256) NOT NULL
+  description TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS

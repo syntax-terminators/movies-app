@@ -7,6 +7,7 @@ const dotenv = require('dotenv');
 const pg = require("pg");
 const superAgent = require("superagent");
 const ejs = require('ejs');
+const override = require('method-override');
 
 /***************************************************
 *****************Configuration**********************
@@ -14,12 +15,12 @@ const ejs = require('ejs');
 dotenv.config();
 const app = express();
 app.use(cors());
-//const client = new pg.Client(process.env.DATABASE_URL);
+const client = new pg.Client(process.env.DATABASE_URL);
 //const client = new pg.Client({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });//heroko
 
 app.use(express.static('./public'));
 app.use(express.urlencoded({ extended: true }));
-
+app.use(override('_method'));
 app.set('view engine', 'ejs');
 
 const PORT = process.env.PORT;
@@ -49,6 +50,15 @@ app.get("/about", aboutHandler);
 // TOP PAGE
 app.get("/top", topHandler);
 
+// ADD MOVIES TO DB
+app.post("/add",addMoviesHandler);
+
+// DETAILS PAGE 2
+app.get("/details2/:id", details2PageHandler);
+
+//  DELETE MOVIES 
+app.delete("/delete/:movie_id", deletemovie);
+
 
 /***************************************************
 *****************HANDLER*****************************
@@ -61,7 +71,7 @@ function detailsPageHandler(req, res) {
     //res.render("pages/details");
 }
 function libraryPageHandler(req, res) {
-    res.render("pages/library");
+    renderMovies(req, res);
 }
 function quizPageHandler(req, res) {
     res.render("pages/quiz");
@@ -76,8 +86,16 @@ function topHandler(req, res) {
     getTopData(req, res);
 
 }
-
-
+function addMoviesHandler(req, res) {
+    // console.log('hello');
+    saveMovies(req, res);
+}
+function details2PageHandler(req, res) {
+    getDetails2Data(req, res);
+}
+function deletemovie(req, res) {
+    getDelete(req, res);
+}
 
 /***************************************************
 *****************GETTER*****************************
@@ -200,6 +218,56 @@ function getTopData(req, res) {
         });
 
 }
+function saveMovies(req, res) {
+    let SQL = `INSERT INTO movie(id,title, date, rating, poster, description) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`
+    let reqBody = req.body;
+    let values = [reqBody.movieID,reqBody.title, reqBody.date, reqBody.rating, reqBody.poster, reqBody.description];
+
+    client.query(SQL, values)
+        .then((data) => {
+            // console.log(data);
+            res.redirect('./library');
+        }).catch(error => {
+            console.log(error);
+            res.render("error", { error: error });
+
+
+        });
+}
+function renderMovies(req, res) {
+    let SQL = `SELECT * FROM movie;`;
+    client.query(SQL)
+        .then(data => {
+            // console.log(data.rows);
+            res.render('pages/library', { moviesList: data.rows });
+        }).catch(error => {
+            console.log(error);
+            res.render("error", { error: error });
+        });
+}
+function getDetails2Data(req, res) {
+    let SQL = `SELECT * FROM movie WHERE id=$1`;
+    let id = req.params.id;
+    let values = [id];
+    client.query(SQL, values)
+        .then(data => {
+            // console.log(data.rows)
+            res.render("pages/details2", { movie: data.rows[0]});
+        }).catch(error => {
+            console.log(error);
+            res.render("error", { error: error });
+        });
+}
+function getDelete(req, res){
+    let SQL = 'DELETE FROM movie WHERE id=$1';
+    let values = [req.params.movie_id];
+    client.query(SQL, values)
+        .then(res.redirect('../library'))
+        .catch(error => {
+            console.log(error);
+            res.render("error", { error: error });
+        });
+}
 
 /***************************************************
 *****************HELPER*****************************
@@ -218,6 +286,14 @@ function Movie(movie) {
 
 }
 
-app.listen(PORT, () => {
-    console.log('app is lestining in port ....', PORT);
-});
+// app.listen(PORT, () => {
+//     console.log('app is lestining in port ....', PORT);
+// });
+client.connect().then((data) => {
+    app.listen(PORT, () => {
+      console.log('the app is listening to ' + PORT);
+    });
+  }).catch(error => {
+    console.log('error in connect to database ' + error);
+  });
+  

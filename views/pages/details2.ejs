@@ -52,26 +52,16 @@
 
                             </h2>
 
-        
+                            <form  action="<%=`/delete/${movie.id}?_method=DELETE`%>" method="POST">
+                                <button id="Button" type="submit"> DELETE MOVIE </button>
+                            </form>
+
                         </section>
                         <!-- <button id="add">
                             Add to library
                         </button> -->
                     </section>
 
-                </section>
-                <section>
-                    <form action="/add" method="POST">
-                        <input type="text" value="<%=movie.title %>" name="title"  hidden>
-                        <input type="text" value="<%=movie.description %>" name="description"  hidden>
-                        <input type="text" value="<%=movie.rating %>" name="rating"  hidden>
-                        <input type="text" value="<%=movie.date %>" name="date"  hidden>
-                        <input type="text" value="<%=movie.movieID %>" name="movieID"  hidden>
-                        <input type="text" value="<%=movie.poster %>" name="poster"  hidden>
-                        <input type="submit" value="add">
-
-                    </form>
-                </section>
                
                 
               

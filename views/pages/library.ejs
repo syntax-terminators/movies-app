@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,19 +11,35 @@
     <link rel="stylesheet" href="../css/styles.css">
 
 </head>
+
 <body>
     <%- include('../partial/header')%>
-    <main>
-            <%- include('../partial/aside')%> 
-            <%- include('../partial/nav')%> 
-     
-    </main>
-    <%- include('../partial/scripts') %>
-    <script>
-        var change = document.getElementById('library11');
-        change.style.backgroundColor="rgb(49, 91, 226)";
-        change.style.color="white";
-        console.log(change);
-    </script>
+        <main>
+            <%- include('../partial/aside') %>
+                <section class='container'>
+                        <section class='display-cards'>
+                            <% moviesList.forEach(movie=> { %>
+
+                                <a class='movie' href="../details2/<%= movie.id%>">
+                                    <section id="renenderImg">
+                                        <img src="<%= movie.poster %>" alt="">
+                                        <p>
+                                            <%= movie.title %>
+                                        </p>
+
+                                    </section>
+                                </a>
+                                <% }) %>
+                        </section>
+                </section>
+        </main>
+        <%- include('../partial/scripts') %>
+            <script>
+                var change = document.getElementById('library11');
+                change.style.backgroundColor = "rgb(49, 91, 226)";
+                change.style.color = "white";
+                console.log(change);
+            </script>
 </body>
+
 </html>
