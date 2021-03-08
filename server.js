@@ -50,6 +50,9 @@ app.get("/about", aboutHandler);
 app.get("/top", topHandler);
 
 
+
+
+
 /***************************************************
 *****************HANDLER*****************************
 ****************************************************/
@@ -69,13 +72,13 @@ function quizPageHandler(req, res) {
 function searchHandler(req, res) {
     getSearchData(req, res)
 }
-function aboutHandler(req,res) {
+function aboutHandler(req, res) {
     res.render("pages/about")
 }
-function topHandler(req,res) {
-    getTopData(req,res);
-    
+function topHandler(req, res) {
+    getTopData(req, res);
 }
+
 
 
 
@@ -103,37 +106,50 @@ function getHomePageData(req, res) {
                             return x.genre_ids.some(x => x == req.query.genraId);
                         } return true;
                     } return true;
-
                 })
                 .filter(x => {
                     if (req.query.year) {//year  provided
                         if (req.query.year !== "all") {//year id not All
-                        // console.log(x);
-                        let newObj = new Date(x.release_date)
-                        if (newObj.getFullYear() == req.query.year) {
-                            return true;
-                        }return false;
+                            // console.log(x);
+                            let newObj = new Date(x.release_date)
+                            if (newObj.getFullYear() == req.query.year) {
+                                return true;
+                            } return false;
                         } return true;
                     } return true;
                 })
                 .map(element => new Movie(element));
             movies.forEach(element => {
-                console.log(element.date)
+                //console.log(element.date)
             });
-            res.render("index", { movies: movies, genre: req.query.genraId ? '' : 'clear', year: req.query.year ? '': 'clear'});
+            res.render("index", { movies: movies, genre: req.query.genraId ? '' : 'clear', year: req.query.year ? '' : 'clear' });
         })
         .catch(error => {
             res.render("error", { "error": error });
         })
 }
-function getDetailsData(req,res) {
+function getDetailsData(req, res) {
     let movieId = req.params.id;
-    let url=`https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.MOVIE_API_KEY}&language=en-US&append_to_response=credits`
+    let url = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.MOVIE_API_KEY}&language=en-US&append_to_response=credits`
     superAgent
         .get(url)
         .then(data => {
             var movie = new Movie(JSON.parse(data.text));
-            res.render("pages/details", { movie: movie });
+            let movieId =req.params.id;
+            let apiUrl=`https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.MOVIE_API_KEY}&language=en-US&append_to_response=credits`
+            superAgent
+            .get(apiUrl)
+            .then(data=>{
+                let actors=JSON.parse(data.text).credits.cast;
+                actors.length=10;
+                console.log(actors)
+                actors = actors.map(actor => new Actor(actor));
+                res.render("pages/details", { movie: movie,actors:actors });
+            })
+            .catch(error=>{
+                res.render("error",{error:error})
+            });
+            
         })
         .catch(error => {
             console.log(error);
@@ -153,7 +169,7 @@ function getSearchData(req, res) {
                 .parse(data.text)
                 .results
                 .map(element => new Movie(element));
-            res.render("index", { movies: movies });
+            res.render("index", { movies: movies, genre: req.query.genraId ? '' : 'clear', year: req.query.year ? '' : 'clear' });
 
         })
         .catch(error => {
@@ -162,23 +178,43 @@ function getSearchData(req, res) {
         })
 
 }
-function getTopData(req,res) {
+function getTopData(req, res) {
 
-    let apiUrl=`https://api.themoviedb.org/3/movie/top_rated?api_key=${process.env.MOVIE_API_KEY}&language=en-US&page=1`;
+    let apiUrl = `https://api.themoviedb.org/3/movie/top_rated?api_key=${process.env.MOVIE_API_KEY}&language=en-US&page=1`;
     superAgent
-    .get(apiUrl)
-    .then(data=>{
-        let movies=JSON.parse(data.text).results;
-        movies.map(x=>{
-            return new Movie(x);
+        .get(apiUrl)
+        .then(data => {
+            let movies = JSON.parse(data.text).results;
+            movies = movies
+                .filter(x => {
+                    if (req.query.genraId) {//genra id provided
+                        if (req.query.genraId !== "all") {//genre id not All
+                            return x.genre_ids.some(x => x == req.query.genraId);
+                        } return true;
+                    } return true;
+
+                })
+                .filter(x => {
+                    if (req.query.year) {//year  provided
+                        if (req.query.year !== "all") {//year id not All
+                            // console.log(x);
+                            let newObj = new Date(x.release_date)
+                            if (newObj.getFullYear() == req.query.year) {
+                                return true;
+                            } return false;
+                        } return true;
+                    } return true;
+                })
+                .map(x => {
+                    return new Movie(x);
+                });
+            res.render("pages/top", { movies: movies, genre: req.query.genraId ? '' : 'clear', year: req.query.year ? '' : 'clear' });
+        })
+        .catch(error => {
+            console.log(error);
+            res.render("error", { error: error });
         });
-        res.render("pages/top",{movies:movies});
-    })
-    .catch(error=>{
-        console.log(error);
-        res.render("error",{error:error});
-    });
-    
+
 }
 
 /***************************************************
@@ -193,9 +229,14 @@ function Movie(movie) {
     this.description = movie.overview || 'Not Available';
     this.title = movie.title || 'Not Available';
     this.rating = movie.vote_average || 'Not Available';
-    this.poster = "https://image.tmdb.org/t/p/w500" + movie.poster_path || 'Not available';
+    this.poster = movie.poster_path ? "https://image.tmdb.org/t/p/w500" + movie.poster_path : '../img/default-poster.png'
     this.date = movie.release_date || 'Not Available';
 
+}
+function Actor(actor){
+    this.name = actor.name;
+    this.character = actor.character;
+    this.poster = actor.profile_path ? ("https://image.tmdb.org/t/p/w500" + actor.profile_path) : '../img/default-poster.png'
 }
 
 app.listen(PORT, () => {
