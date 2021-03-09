@@ -117,16 +117,30 @@ function quizScoreHandler(req,res) {
     console.log("choice ",correctChoice);
     let total=0;
     userChoice.forEach((x,i)=>{
-        if(i+1%3==0){//actors array
-            if(correctChoice[i].includes(x))total++;
+        if(typeof correctChoice[i] === 'object'){
+            if(correctChoice[i].includes(x.toString())){
+                total ++;
+            }
+        } else{
+            if(x==correctChoice[i])total++;
         }
-        if(x==correctChoice[i])total++;
+        // if(i+1%3==0){//actors array
+        //     if(correctChoice[i].includes(x.toString()))total++;
+        // }
+        // if(x==correctChoice[i])total++;
         
     })
-    total=((total/(userChoice.length)).toFixed(1))*100
-    console.log("user score: "+total+"%")
-
-    
+    console.log('total', total)
+    // total=((total/(userChoice.length)).toFixed(1))*100
+    // res.redirect(`/library?score=${total}`)
+    let deleteScore = 'DELETE FROM score;';
+    client.query(deleteScore).then(() =>{
+        let addScore = 'INSERT INTO score(score) VALUES($1);';
+        client.query(addScore, [total]).then(() =>{
+            console.log('score added to the database')
+        }).catch(error => res.render('error'))
+    })
+    res.redirect('/library');
 }
 
 
@@ -453,7 +467,15 @@ function renderMovies(req, res) {
     let SQL = `SELECT * FROM movie;`;
     client.query(SQL)
         .then(data => {
-            res.render('pages/library', { moviesList: data.rows });
+            let getScoreQuery = 'SELECT * FROM score'
+            client.query(getScoreQuery).then(score =>{
+                if(score.rows.length >= 1){
+                    res.render('pages/library', { moviesList: data.rows, score: score.rows[0].score});
+                } else{
+                    res.render('pages/library', { moviesList: data.rows});
+                }
+            }).catch()
+            
         }).catch(error => {
             console.log(error);
             res.render("error", { error: error });
@@ -479,7 +501,7 @@ function getRandomYear() {
     let temp=[];
     for (let index = 0; index < 30; index++) {
         let rand=Math.floor(Math.random() * 41) + 1980;
-        if(!temp.includes(rand))
+        if(!temp.includes(rand.toString()))
         temp.push(rand.toString())
         if(temp.length==6)break;
     }

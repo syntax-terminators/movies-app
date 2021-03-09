@@ -37,6 +37,9 @@
                             </a>
                             <% }) %>
                     </section>
+                    <% if (typeof score !== 'undefined') { %>
+                        <h3><%= score %> </h3>
+                    <% } %>
                 </section>
         </main>
         <%- include('../partial/scripts') %>
