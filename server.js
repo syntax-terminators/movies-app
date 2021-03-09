@@ -342,7 +342,7 @@ quizList.forEach(questions =>{
     })
 })
 
-res.send(quizList);
+res.render('pages/quiz', {quizes: quizList});
 }
 
 

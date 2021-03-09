@@ -432,3 +432,16 @@ section.display-actors>section>ul p{
     font-weight: bold;
     
 }
+
+/* quiz */
+
+.quiz-form{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+}
+.quiz-form{
+    padding: 2%;
+    font-size: 1.5vw;
+}

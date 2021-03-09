@@ -14,20 +14,20 @@
     <%- include('../partial/header')%>
     <main>
             <%- include('../partial/aside')%> 
-            
-            <section class="container">
-                <section id="f">
-                   <p> Quiz</p>
-                </section>
-            </section>
-
+            <form class = 'quiz-form' action="">
+                <% quizes.forEach(quiz => { %>
+                    <% quiz.forEach((question, i) => { %>
+                             <h3><%= question.header %> </h3>
+                            <div>
+                             <% question.choises.forEach(choice => { %>
+                                    <label for="<% choice %>"><%= choice %></label>
+                                    <input type="radio" name = <%= `question${i}`%> value="<%= choice %>">
+                             <% }) %>
+                             </div>
+                    <% }) %>
+                <% }) %>
+            </form>
     </main>
     <%- include('../partial/scripts') %>
-    <script>
-        var change = document.getElementById('quiz11');
-        change.style.backgroundColor="rgb(49, 91, 226)";
-        change.style.color="white";
-        console.log(change);
-    </script>
 </body>
 </html>
