@@ -324,8 +324,14 @@ function generateQuiz(res,temp) {
 }
 
 let quizList=getQuizList(temp,questionTemplate);
+
+console.log(quizList[0][0].choises)
+quizList.forEach(x=>{
+    x.map(x=>{
+        console
+    })
+})
 res.send(quizList);
-console.log(quizList);
 }
 
 
@@ -351,16 +357,20 @@ function getQuestionList(movie,template) {
     let templateKeys=Object.keys(template);
     moviesKeys.forEach(x=>{
         templateKeys.forEach(y=>{
-           
             if(x==y){
+                
                 let choises=template[y].choises;
                 let header=template[y].question;
                 let correctChoice=movie[x];
+
+                //choises.push(correctChoice);
+
                 var question={
                     header:header,
                     choises:choises,
                     correctChoice:correctChoice
                 }
+               //console.log("choices=: ",choises)
                 temp.push(question);
             };
         })
