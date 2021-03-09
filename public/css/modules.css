@@ -65,7 +65,7 @@ background-color: #23408B;
 .logo{
     font-size: 2em;  
 }
-.logo>img{
+.logo>a>img{
     max-height: 10vh;
 }
 .social-media{
@@ -440,12 +440,66 @@ section.display-actors>section>ul p{
     margin-left: 16px;
     justify-content: space-between;
     color: white;
+    max-height: 60vh;
 }
 .movie-info-span{
     color: #ff5050;
+}
+.movie-title{
+    font-family: 'Abril Fatface', cursive;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 5vw;
+    text-align: center;
 }
 
 /* header */
 #brandLogo{
     background: url('../img/CodeFlixLogo.png')
+}
+
+
+/*Library*/
+.take-quiz-container{
+    padding: 8px;
+    background: #292D35;
+    width: 100%;
+    text-align: center;
+}
+#take_quiz{
+    background-color: #23408B;
+    color: black;
+    font-size: large;
+    font-weight: bold;
+    
+}
+
+/* quiz */
+
+.quiz-form{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    margin: auto;
+    align-items: center;
+  
+}
+.quiz-form{
+    padding: 2%;
+    font-size: 1.5vw;
+}
+
+.question-block{
+    padding: 8px;
+    background-color: white;
+    box-shadow: 1px 3px #888888;
+}
+.question-block{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    
+}
+.choice-block{
+    display: flex;
+    flex-direction: row;
 }

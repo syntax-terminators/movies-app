@@ -8,6 +8,7 @@
     <title>Document</title>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Open+Sans&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/styles.css">
 </head>
 
@@ -16,7 +17,7 @@
     <%- include('../partial/header')%>
         <main>
             <%- include('../partial/aside')%>
-                
+
 
                 <section class="all">
                     <section class="container">
@@ -24,17 +25,17 @@
                             <p> Details</p>
                         </section>
                     </section>
-                    <section  id="display" >
+                    <section id="display">
 
                         <section id="cont">
-                            <img class="singleImg" src="<%= movie.poster %>" alt="">
+                            <div class = "movie-image">
+                                <img class="singleImg" src="<%= movie.poster %>" alt=""> 
+                            </div>
+                            
                             <div class="movie-info">
-                            <h2>
-                                <span class="movie-info-span">
-                                Title&nbsp;:&nbsp;
-                            </span>
+                            <h2 class = 'movie-title'>
                                 <%=movie.title %>
-                                <hr style="width:50%;text-align:left;margin-left:0">
+                                <hr style="text-align:left;margin-left:0">
 
                             </h2>
 
@@ -43,26 +44,18 @@
                                 Description&nbsp;:&nbsp;
                             </span>
                                 <%=movie.description %>
-                                <hr style="width:50%;text-align:left;margin-left:0">
-
                             </h2>
-
-                            <h2>
-                                <span class="movie-info-span">
-                                Rating&nbsp;:&nbsp;
-                            </span>
-                                <%=movie.rating %>
-                                <hr style="width:50%;text-align:left;margin-left:0">
-
-                            </h2>
-
                             <h2>
                                 <span class="movie-info-span">
                                 Date&nbsp;:&nbsp;
                             </span>
                                 <%=movie.date %>
-                                <hr style="width:50%;text-align:left;margin-left:0">
-
+                            </h2>
+                            <h2>
+                                <span class="movie-info-span">
+                                Rating&nbsp;:&nbsp;
+                            </span>
+                                <%=movie.rating %>
                             </h2>
                         </div>
                             
@@ -76,17 +69,31 @@
                                     </ul>
                                 <% }) %>
                             </section>
-                           
+
+
                         </section>
-                        <!-- <button id="add">
-                            Add to library
-                        </button> -->
+
+                        <form style="text-align: center;" action="/add" method="POST">
+                            <input type="text" value="<%=movie.title %>" name="title" hidden>
+                            <input type="text" value="<%=movie.description %>" name="description" hidden>
+                            <input type="text" value="<%=movie.rating %>" name="rating" hidden>
+                            <input type="text" value="<%=movie.date %>" name="date" hidden>
+                            <input type="text" value="<%=movie.movieID %>" name="movieID" hidden>
+                            <input type="text" value="<%=movie.poster %>" name="poster" hidden>
+                            <input type="text" value="<%=JSON.stringify(actors) %>" name="actors" hidden>
+                            <input type="submit" value="ADD MOVIE">
+
+                        </form>
+                        <br><br>
                     </section>
 
                 </section>
-               
-                
-              
+                <section>
+
+                </section>
+
+
+
 
                 <%- include('../partial/scripts') %>
 
@@ -97,8 +104,8 @@
         <script src="./js/app.js"></script>
         <script>
             var change = document.getElementById('details11');
-            change.style.backgroundColor="rgb(49, 91, 226)";
-            change.style.color="white";
+            change.style.backgroundColor = "rgb(49, 91, 226)";
+            change.style.color = "white";
             console.log(change);
         </script>
 </body>
