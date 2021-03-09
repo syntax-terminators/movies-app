@@ -272,10 +272,10 @@ function getDelete(req, res){
 
 }
 function getQuiz(req,res) {
-   let SQL=`Select * from movie`;
+   let SQL=`SELECT * FROM movie`;
     client.query(SQL)
         .then(data => {
-        formatMoviesList(data.rows,res)
+        formatMoviesList(data.rows,res);
        // res.send(data.rows);
         }).catch(error => {
             //console.log(error);
@@ -289,7 +289,7 @@ function getQuiz(req,res) {
 ****************************************************/
 function formatMoviesList(movies,res) {
     let temp=[];
-    let sql=`SELECT name FROM actors WHERE actors.moviesid=$1 `
+    let sql=`SELECT name FROM actors WHERE moviesid=$1 `
     movies.forEach(x=>{
         let safeValue=[x.id];
         client.query(sql,safeValue).then(data=>{
@@ -324,47 +324,47 @@ function generateQuiz(res,temp) {
 }
 
 let quizList=getQuizList(temp,questionTemplate);
-//res.send(quizList);
-
+res.send(quizList);
+console.log(quizList);
 }
 
 
 function getQuizList(movies,questionTemplate) {
     var temp=[]
     movies.forEach(element => {
-        temp.push(getQuiz(element,questionTemplate));
+        temp.push(getQuiz2(element,questionTemplate));
     });
 
     return temp;
 }  
-function getQuiz(movie,template) {
+function getQuiz2(movie,template) {
     var questions=getQuestionList(movie,template);
     return questions;
 }
 function getQuestionList(movie,template) {
     let temp=[];
-    console.log("template : ",template);
+    // console.log("template : ",template);
     
-    //let questionsNumber=Object.entries(template).length;
+    let questionsNumber=Object.entries(template).length;
     
-    // let moviesKeys=Object.keys(movie);
-    // let templateKeys=Object.keys(template);
-    // moviesKeys.forEach(x=>{
-    //     templateKeys.forEach(y=>{
+    let moviesKeys=Object.keys(movie);
+    let templateKeys=Object.keys(template);
+    moviesKeys.forEach(x=>{
+        templateKeys.forEach(y=>{
            
-    //         if(x==y){
-    //             let choises=template[y].choises;
-    //             let header=template[y].question;
-    //             let correctChoice=movie[x];
-    //             var question={
-    //                 header:header,
-    //                 choises:choises,
-    //                 correctChoice:correctChoice
-    //             }
-    //             temp.push(question);
-    //         };
-    //     })
-    // })
+            if(x==y){
+                let choises=template[y].choises;
+                let header=template[y].question;
+                let correctChoice=movie[x];
+                var question={
+                    header:header,
+                    choises:choises,
+                    correctChoice:correctChoice
+                }
+                temp.push(question);
+            };
+        })
+    })
 
     return temp;
 }
