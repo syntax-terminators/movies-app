@@ -326,11 +326,17 @@ function generateQuiz(res,temp) {
 let quizList=getQuizList(temp,questionTemplate);
 
 console.log(quizList[0][0].choises)
-quizList.forEach(x=>{
-    x.map(x=>{
-        console
+quizList.forEach(questions =>{
+    questions.map(question =>{
+        question.choises.push(question.correctChoice);
+        return question
     })
 })
+// quizList.forEach(x=>{
+//     x.map(x=>{
+//         console
+//     })
+// })
 res.send(quizList);
 }
 
@@ -371,7 +377,7 @@ function getQuestionList(movie,template) {
                     correctChoice:correctChoice
                 }
                //console.log("choices=: ",choises)
-                temp.push(question);
+                temp.push(JSON.parse(JSON.stringify(question)));
             };
         })
     })
