@@ -65,7 +65,7 @@ background-color: #23408B;
 .logo{
     font-size: 2em;  
 }
-.logo>img{
+.logo>a>img{
     max-height: 10vh;
 }
 .social-media{
