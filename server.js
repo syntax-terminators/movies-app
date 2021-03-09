@@ -7,6 +7,7 @@ const dotenv = require('dotenv');
 const pg = require("pg");
 const superAgent = require("superagent");
 const override = require('method-override');
+const { Template } = require('ejs');
 
 /***************************************************
 *****************Configuration**********************
@@ -271,13 +272,13 @@ function getDelete(req, res){
 
 }
 function getQuiz(req,res) {
-   let SQL=`Select * from movie JOIN actors ON movie.id=actors.moviesid `;
+   let SQL=`Select * from movie`;
     client.query(SQL)
         .then(data => {
-         getFormatedMoviesList(data.rows)
-       //res.send(data.rows);
+        formatMoviesList(data.rows,res)
+       // res.send(data.rows);
         }).catch(error => {
-            console.log(error);
+            //console.log(error);
             res.render("error", { error: error });
         });
 }
@@ -286,12 +287,88 @@ function getQuiz(req,res) {
 /***************************************************
 *****************HELPER*****************************
 ****************************************************/
-function getFormatedMoviesList(movies) {
+function formatMoviesList(movies,res) {
     let temp=[];
-
-
-    
+    let sql=`SELECT name FROM actors WHERE actors.moviesid=$1 `
+    movies.forEach(x=>{
+        let safeValue=[x.id];
+        client.query(sql,safeValue).then(data=>{
+            let actors=data.rows.map(x=>x.name);
+            var movie={
+                name:x.title,
+                rating:x.rating,
+                date:x.date,
+                actors:actors
+            }
+            temp.push(movie);
+            if(temp.length==movies.length){//final movie
+                generateQuiz(res,temp);
+            };
+        })
+    });
 }
+function generateQuiz(res,temp) {
+    const questionTemplate={
+        rating:{
+            question:'what is the rating of this movie',
+            choises:["10","5","7","9","1"]
+        },
+        date :{
+            question:'what is the date of this movie',
+            choises:["2020","2018","1998","1995","2004"]
+        },
+        actors:{
+            question:"one of the following actors act in this movie",
+            choises:["motasem","qamr","foo","scarlet","data","john"]
+        }    
+}
+
+let quizList=getQuizList(temp,questionTemplate);
+//res.send(quizList);
+
+}
+
+
+function getQuizList(movies,questionTemplate) {
+    var temp=[]
+    movies.forEach(element => {
+        temp.push(getQuiz(element,questionTemplate));
+    });
+
+    return temp;
+}  
+function getQuiz(movie,template) {
+    var questions=getQuestionList(movie,template);
+    return questions;
+}
+function getQuestionList(movie,template) {
+    let temp=[];
+    console.log("template : ",template);
+    
+    //let questionsNumber=Object.entries(template).length;
+    
+    // let moviesKeys=Object.keys(movie);
+    // let templateKeys=Object.keys(template);
+    // moviesKeys.forEach(x=>{
+    //     templateKeys.forEach(y=>{
+           
+    //         if(x==y){
+    //             let choises=template[y].choises;
+    //             let header=template[y].question;
+    //             let correctChoice=movie[x];
+    //             var question={
+    //                 header:header,
+    //                 choises:choises,
+    //                 correctChoice:correctChoice
+    //             }
+    //             temp.push(question);
+    //         };
+    //     })
+    // })
+
+    return temp;
+}
+
 function saveMovies(req, res) {
     let SQL = `INSERT INTO movie(id,title, date, rating, poster, description) VALUES ($1, $2, $3, $4, $5, $6)`
     let reqBody = req.body;
