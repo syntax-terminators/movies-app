@@ -75,8 +75,8 @@ function libraryPageHandler(req, res) {
     renderMovies(req, res);
 }
 function quizPageHandler(req, res) {
-    getQuiz(req,res);
-   // res.render("pages/quiz");
+    // getQuiz(req,res);
+   res.render("pages/quiz");
 }
 function searchHandler(req, res) {
     getSearchData(req, res)

@@ -8,26 +8,62 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/quiz.css">
 
 </head>
 <body>
-    <%- include('../partial/header')%>
+    <!-- <%- include('../partial/header')%> -->
     <main>
-            <%- include('../partial/aside')%> 
+            <!-- <%- include('../partial/aside')%>  -->
             
+            <section class="all">
             <section class="container">
                 <section id="f">
                    <p> Quiz</p>
                 </section>
             </section>
 
+            
+            
+        <section class="questionsSection">
+            <h2 class="movname">Movie Name</h2>
+            <form action="" method="" id="quiz">
+                <li>
+                    <h3 class="Questions">Question</h3>
+                    
+                    <div class="Ansers">
+                        <input type="radio" name="question-1-answers" id="question-1-answers-A" value="A" />
+                        <label for="question-1-answers-A">Answer 1 </label>
+                    </div>
+                    
+                    <div class="Ansers">
+                        <input type="radio" name="question-1-answers" id="question-1-answers-B" value="B" />
+                        <label for="question-1-answers-B">Answer 2</label>
+                    </div>
+                    
+                    <div class="Ansers">
+                        <input type="radio" name="question-1-answers" id="question-1-answers-C" value="C" />
+                        <label for="question-1-answers-C">Answer 3</label>
+                    </div>
+                    
+                    <div>
+                        <input type="radio" name="question-1-answers" id="question-1-answers-D" value="D" />
+                        <label for="question-1-answers-D">Answer 4</label>
+                    </div>
+                
+                </li>
+            </form>
+        </section>
+    </section>
+
+
     </main>
-    <%- include('../partial/scripts') %>
-    <script>
+    <!-- <%- include('../partial/scripts') %> -->
+    <!-- <script>
         var change = document.getElementById('quiz11');
         change.style.backgroundColor="rgb(49, 91, 226)";
         change.style.color="white";
         console.log(change);
-    </script>
+    </script> -->
 </body>
 </html>
