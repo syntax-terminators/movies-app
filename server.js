@@ -297,7 +297,7 @@ function formatMoviesList(movies,res) {
             var movie={
                 name:x.title,
                 rating:x.rating,
-                date:x.date,
+                date:new Date(x.date).getFullYear().toString(),
                 actors:actors
             }
             temp.push(movie);
@@ -310,33 +310,38 @@ function formatMoviesList(movies,res) {
 function generateQuiz(res,temp) {
     const questionTemplate={
         rating:{
-            question:'what is the rating of this movie',
-            choises:["10","5","7","9","1"]
+            question:'what is the rating of the ',
+            choises:getRandomRatingArray()
         },
         date :{
-            question:'what is the date of this movie',
-            choises:["2020","2018","1998","1995","2004"]
+            question:'what is the date of the ',
+            choises:getRandomYear()
         },
         actors:{
-            question:"one of the following actors act in this movie",
-            choises:["motasem","qamr","foo","scarlet","data","john"]
+            question:"one of the following actors act in the ",
+            choises:["Alain Moussi","Eddie Steeples","Yang Yang","Scarlet johanson","Jackie Chan","Al Pacino","William Hanna"]
         }    
 }
 
 let quizList=getQuizList(temp,questionTemplate);
 
-console.log(quizList[0][0].choises)
 quizList.forEach(questions =>{
     questions.map(question =>{
+       
+       if(typeof question.correctChoice !=typeof {}){
+        if(!question.choises.includes(question.correctChoice))
         question.choises.push(question.correctChoice);
         return question
+       }else{
+        //    let randomActor=question.correctChoice[getRandom(question.correctChoice.length)];
+        let randomActor=question.correctChoice[0];
+           if(!question.choises.includes(randomActor))
+            question.choises.push(randomActor);
+            return question  
+       }
     })
 })
-// quizList.forEach(x=>{
-//     x.map(x=>{
-//         console
-//     })
-// })
+
 res.send(quizList);
 }
 
@@ -364,20 +369,23 @@ function getQuestionList(movie,template) {
     moviesKeys.forEach(x=>{
         templateKeys.forEach(y=>{
             if(x==y){
+                //x== actors
+                //
                 
                 let choises=template[y].choises;
                 let header=template[y].question;
                 let correctChoice=movie[x];
-
-                //choises.push(correctChoice);
-
+                
+                
+                 //console.log(movie)
                 var question={
-                    header:header,
+                    header:header+movie.name+" movie?",
                     choises:choises,
                     correctChoice:correctChoice
                 }
                //console.log("choices=: ",choises)
                 temp.push(JSON.parse(JSON.stringify(question)));
+                
             };
         })
     })
@@ -425,7 +433,33 @@ function renderMovies(req, res) {
             res.render("error", { error: error });
         });
 }
+function getRandom(max) {
+  return  Math.floor(Math.random() * max)
+}
+function getFloatRandom(max) {
+    return  (Math.random() * max).toFixed(1);
+  }
 
+function getRandomRatingArray(){
+    let temp=[];
+    for (let index = 0; index < 30; index++) {
+        let rand=getFloatRandom(10)
+        if(!temp.includes(rand))
+        temp.push(rand.toString())
+        if(temp.length==6)break;
+    }
+    return temp;
+}
+function getRandomYear() {
+    let temp=[];
+    for (let index = 0; index < 30; index++) {
+        let rand=Math.floor(Math.random() * 41) + 1980;
+        if(!temp.includes(rand))
+        temp.push(rand.toString())
+        if(temp.length==6)break;
+    }
+    return temp;
+}
 
 /***************************************************
 *****************DATA MODEL*************************
