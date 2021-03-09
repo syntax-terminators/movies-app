@@ -479,7 +479,7 @@ function getRandomYear() {
     let temp=[];
     for (let index = 0; index < 30; index++) {
         let rand=Math.floor(Math.random() * 41) + 1980;
-        if(!temp.includes(rand))
+        if(!temp.includes(rand.toString()))
         temp.push(rand.toString())
         if(temp.length==6)break;
     }
