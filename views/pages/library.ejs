@@ -16,7 +16,13 @@
     <%- include('../partial/header')%>
         <main>
             <%- include('../partial/aside') %>
+            
                 <section class='container'>
+                    <div class="take-quiz-container">
+                        <form action="/quiz" method="GET">
+                        <button id="take_quiz">Take Quiz Now</button>
+                        </form>
+                    </div>
                     <section class='display-cards'>
                         <% moviesList.forEach(movie=> { %>
 

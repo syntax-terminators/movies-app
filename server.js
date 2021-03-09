@@ -6,7 +6,6 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const pg = require("pg");
 const superAgent = require("superagent");
-const ejs = require('ejs');
 const override = require('method-override');
 
 /***************************************************
@@ -76,7 +75,8 @@ function libraryPageHandler(req, res) {
     renderMovies(req, res);
 }
 function quizPageHandler(req, res) {
-    res.render("pages/quiz");
+    getQuiz(req,res);
+   // res.render("pages/quiz");
 }
 function searchHandler(req, res) {
     getSearchData(req, res)
@@ -232,51 +232,6 @@ function getTopData(req, res) {
         });
 
 }
-
-
-/***************************************************
-*****************HELPER*****************************
-****************************************************/
-function saveMovies(req, res) {
-    let SQL = `INSERT INTO movie(id,title, date, rating, poster, description) VALUES ($1, $2, $3, $4, $5, $6)`
-    let reqBody = req.body;
-    let values = [reqBody.movieID,reqBody.title, reqBody.date, reqBody.rating, reqBody.poster, reqBody.description];
-
-    client.query(SQL, values)
-        .then((data) => {
-            let actorsjson = JSON.parse(req.body.actors);
-            actorsjson.forEach(actor=>{
-            let values2 = [actor.poster,actor.name,reqBody.movieID];
-            let SQL2 = `INSERT INTO actors(image, name, moviesid) VALUES ($1, $2, $3)`
-            client.query(SQL2, values2)
-                .then((data) => {
-                }).catch(error => {
-                    console.log(error);
-                    res.render("error", { error: error });
-                });
-        
-            }); res.redirect('/library');
-
-        }).catch(error => {
-            console.log(error);
-            res.render("error", { error: error });
-        });
-
-
-
-}
-
-function renderMovies(req, res) {
-    let SQL = `SELECT * FROM movie;`;
-    client.query(SQL)
-        .then(data => {
-            res.render('pages/library', { moviesList: data.rows });
-        }).catch(error => {
-            console.log(error);
-            res.render("error", { error: error });
-        });
-}
-
 function getDetails2Data(req, res) {
     let SQL = `SELECT * FROM movie WHERE id=$1`;
     let id = req.params.id;
@@ -315,6 +270,70 @@ function getDelete(req, res){
         });
 
 }
+function getQuiz(req,res) {
+   let SQL=`Select * from movie JOIN actors ON movie.id=actors.moviesid `;
+    client.query(SQL)
+        .then(data => {
+         getFormatedMoviesList(data.rows)
+       //res.send(data.rows);
+        }).catch(error => {
+            console.log(error);
+            res.render("error", { error: error });
+        });
+}
+
+
+/***************************************************
+*****************HELPER*****************************
+****************************************************/
+function getFormatedMoviesList(movies) {
+    let temp=[];
+
+
+    
+}
+function saveMovies(req, res) {
+    let SQL = `INSERT INTO movie(id,title, date, rating, poster, description) VALUES ($1, $2, $3, $4, $5, $6)`
+    let reqBody = req.body;
+    let values = [reqBody.movieID,reqBody.title, reqBody.date, reqBody.rating, reqBody.poster, reqBody.description];
+
+    client.query(SQL, values)
+        .then((data) => {
+            let actorsjson = JSON.parse(req.body.actors);
+            actorsjson.forEach(actor=>{
+            let values2 = [actor.poster,actor.name,reqBody.movieID];
+            let SQL2 = `INSERT INTO actors(image, name, moviesid) VALUES ($1, $2, $3)`
+            client.query(SQL2, values2)
+                .then((data) => {
+                }).catch(error => {
+                    console.log(error);
+                    res.render("error", { error: error });
+                });
+        
+            }); res.redirect('/library');
+
+        }).catch(error => {
+            console.log(error);
+            res.redirect("/");//raw already exist
+            //res.render("error", { error: error });
+        });
+
+
+
+}
+
+function renderMovies(req, res) {
+    let SQL = `SELECT * FROM movie;`;
+    client.query(SQL)
+        .then(data => {
+            res.render('pages/library', { moviesList: data.rows });
+        }).catch(error => {
+            console.log(error);
+            res.render("error", { error: error });
+        });
+}
+
+
 /***************************************************
 *****************DATA MODEL*************************
 ****************************************************/

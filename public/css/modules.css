@@ -416,3 +416,19 @@ section.display-actors>section>ul p{
 #brandLogo{
     background: url('../img/CodeFlixLogo.png')
 }
+
+
+/*Library*/
+.take-quiz-container{
+    padding: 8px;
+    background: #292D35;
+    width: 100%;
+    text-align: center;
+}
+#take_quiz{
+    background-color: #23408B;
+    color: black;
+    font-size: large;
+    font-weight: bold;
+    
+}
