@@ -376,12 +376,14 @@ quizList.forEach(questions =>{
        if(typeof question.correctChoice !=typeof {}){
         if(!question.choises.includes(question.correctChoice))
         question.choises.push(question.correctChoice);
+        question.choises = shuffleArray(question.choises)
         return question
        }else{
         //    let randomActor=question.correctChoice[getRandom(question.correctChoice.length)];
         let randomActor=question.correctChoice[0];
            if(!question.choises.includes(randomActor))
             question.choises.push(randomActor);
+            question.choises = shuffleArray(question.choises)
             return question  
        }
     })
@@ -393,6 +395,7 @@ function getQuizList(movies,questionTemplate) {
     movies.forEach(element => {
         temp.push(getQuiz2(element,questionTemplate));
     });
+    temp = shuffleArray(temp);
     if(temp.length > 5){
         temp = temp.slice(0, 5);
     }
@@ -433,7 +436,6 @@ function getQuestionList(movie,template) {
             };
         })
     })
-
     return temp;
 }
 function saveMovies(req, res) {
@@ -508,6 +510,13 @@ function getRandomYear() {
         if(temp.length==6)break;
     }
     return temp;
+}
+function shuffleArray(array) { // Durstenfeld shuffle 
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array
 }
 
 /***************************************************
