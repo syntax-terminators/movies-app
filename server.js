@@ -100,7 +100,33 @@ function deletemovie(req, res) {
     getDelete(req, res);
 }
 function quizScoreHandler(req,res) {
-    console.log(req.query)
+    let quiz=JSON.parse(req.query.quizes)
+    //console.log(quiz);
+    let correctChoice=[];
+    quiz.forEach(x=>{
+        x.forEach(u=>{
+            correctChoice.push(u.correctChoice)
+        }); 
+    });
+
+    console.log("*************************");
+    let userChoice=Object.values(req.query);
+    userChoice.length=userChoice.length-1;
+    console.log(userChoice);
+    console.log("*************************");
+    console.log("choice ",correctChoice);
+    let total=0;
+    userChoice.forEach((x,i)=>{
+        if(i+1%3==0){//actors array
+            if(correctChoice[i].includes(x))total++;
+        }
+        if(x==correctChoice[i])total++;
+        
+    })
+    total=((total/(userChoice.length)).toFixed(1))*100
+    console.log("user score: "+total+"%")
+
+    
 }
 
 
@@ -346,11 +372,8 @@ quizList.forEach(questions =>{
        }
     })
 })
-
 res.render('pages/quiz', {quizes: quizList});
 }
-
-
 function getQuizList(movies,questionTemplate) {
     var temp=[]
     movies.forEach(element => {
@@ -397,7 +420,6 @@ function getQuestionList(movie,template) {
 
     return temp;
 }
-
 function saveMovies(req, res) {
     let SQL = `INSERT INTO movie(id,title, date, rating, poster, description) VALUES ($1, $2, $3, $4, $5, $6)`
     let reqBody = req.body;
@@ -427,7 +449,6 @@ function saveMovies(req, res) {
 
 
 }
-
 function renderMovies(req, res) {
     let SQL = `SELECT * FROM movie;`;
     client.query(SQL)
@@ -443,8 +464,7 @@ function getRandom(max) {
 }
 function getFloatRandom(max) {
     return  (Math.random() * max).toFixed(1);
-  }
-
+}
 function getRandomRatingArray(){
     let temp=[];
     for (let index = 0; index < 30; index++) {
