@@ -1,27 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Open+Sans&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/styles.css">
 </head>
-<body>
-    details
-    <%- include('../partial/header')%>
-    <main>
-       
-            <%- include('../partial/aside')%> 
 
-        <section class="container">
-            <section id="filter">
-            <p> Details</p>    
-            </section>
-        </section>
-    </main>
-    <%- include('../partial/scripts') %>
+<body>
+
+    <%- include('../partial/header')%>
+        <main>
+            <%- include('../partial/aside')%>
+
+
+                <section class="all">
+                    <section class="container">
+                        <section id="f">
+                            <p> Details</p>
+                        </section>
+                    </section>
+                    <section id="display">
+
+                        <section id="cont">
+                            <div class = "movie-image">
+                                <img class="singleImg" src="<%= movie.poster %>" alt=""> 
+                            </div>
+                            
+                            <div class="movie-info">
+                            <h2 class = 'movie-title'>
+                                <%=movie.title %>
+                                <hr style="text-align:left;margin-left:0">
+
+                            </h2>
+
+                            <h2>
+                                <span class="movie-info-span">
+                                Description&nbsp;:&nbsp;
+                            </span>
+                                <%=movie.description %>
+                            </h2>
+                            <h2>
+                                <span class="movie-info-span">
+                                Date&nbsp;:&nbsp;
+                            </span>
+                                <%=movie.date %>
+                            </h2>
+                            <h2>
+                                <span class="movie-info-span">
+                                Rating&nbsp;:&nbsp;
+                            </span>
+                                <%=movie.rating %>
+                            </h2>
+                        </div>
+                            
+                        </section>
+                        <section class = 'display-actors'>
+                            <section class = 'actors-container'>
+                                <% actors.forEach(actor => { %>
+                                    <ul>
+                                        <li><img src="<%= actor.poster %>" alt=""></li>
+                                        <li><p><%= actor.name %></p></li>
+                                    </ul>
+                                <% }) %>
+                            </section>
+
+
+                        </section>
+
+                        <form style="text-align: center;" action="/add" method="POST">
+                            <input type="text" value="<%=movie.title %>" name="title" hidden>
+                            <input type="text" value="<%=movie.description %>" name="description" hidden>
+                            <input type="text" value="<%=movie.rating %>" name="rating" hidden>
+                            <input type="text" value="<%=movie.date %>" name="date" hidden>
+                            <input type="text" value="<%=movie.movieID %>" name="movieID" hidden>
+                            <input type="text" value="<%=movie.poster %>" name="poster" hidden>
+                            <input type="text" value="<%=JSON.stringify(actors) %>" name="actors" hidden>
+                            <input type="submit" value="ADD MOVIE">
+
+                        </form>
+                        <br><br>
+                    </section>
+
+                </section>
+                <section>
+
+                </section>
+
+
+
+
+                <%- include('../partial/scripts') %>
+
+        </main>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <script src="https://kit.fontawesome.com/c8e4d183c2.js" crossorigin="anonymous"></script>
+        <script src="./js/app.js"></script>
+        <script>
+            var change = document.getElementById('details11');
+            change.style.backgroundColor = "rgb(49, 91, 226)";
+            change.style.color = "white";
+            console.log(change);
+        </script>
 </body>
+
 </html>
