@@ -440,8 +440,18 @@ section.display-actors>section>ul p{
     flex-direction: column;
     width: 100%;
     align-items: center;
+  
 }
 .quiz-form{
     padding: 2%;
     font-size: 1.5vw;
+}
+.h3-question{
+    background-color:#23408B ;
+    border: solid rgb(150, 135, 236) 10px;
+}
+.answers{
+    background-color:#909bb8 ;
+    margin: 10px;
+    border: solid rgb(150, 135, 236) 10px;
 }

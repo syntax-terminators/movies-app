@@ -17,8 +17,8 @@
             <form class = 'quiz-form' action="">
                 <% quizes.forEach(quiz => { %>
                     <% quiz.forEach((question, i) => { %>
-                             <h3><%= question.header %> </h3>
-                            <div>
+                             <h3 class="h3-question"><%= question.header %> </h3>
+                            <div class="answers">
                              <% question.choises.forEach(choice => { %>
                                     <label for="<% choice %>"><%= choice %></label>
                                     <input type="radio" name = <%= `question${i}`%> value="<%= choice %>">
