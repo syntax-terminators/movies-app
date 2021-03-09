@@ -58,6 +58,8 @@ app.get("/details2/:id", details2PageHandler);
 
 //  DELETE MOVIES 
 app.delete("/delete/:movie_id", deletemovie);
+// QUIZZ SCORE
+app.get("/quiz/score", quizScoreHandler);
 
 
 
@@ -96,6 +98,9 @@ function details2PageHandler(req, res) {
 }
 function deletemovie(req, res) {
     getDelete(req, res);
+}
+function quizScoreHandler(req,res) {
+    console.log(req.query)
 }
 
 

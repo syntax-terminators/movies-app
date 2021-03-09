@@ -438,7 +438,8 @@ section.display-actors>section>ul p{
 .quiz-form{
     display: flex;
     flex-direction: column;
-    width: 100%;
+    width: 50%;
+    margin: auto;
     align-items: center;
   
 }
@@ -446,12 +447,19 @@ section.display-actors>section>ul p{
     padding: 2%;
     font-size: 1.5vw;
 }
-.h3-question{
-    background-color:#23408B ;
-    border: solid rgb(150, 135, 236) 10px;
+
+.question-block{
+    padding: 8px;
+    background-color: white;
+    box-shadow: 1px 3px #888888;
 }
-.answers{
-    background-color:#909bb8 ;
-    margin: 10px;
-    border: solid rgb(150, 135, 236) 10px;
+.question-block{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    
+}
+.choice-block{
+    display: flex;
+    flex-direction: row;
 }
