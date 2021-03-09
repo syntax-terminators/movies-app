@@ -393,7 +393,9 @@ function getQuizList(movies,questionTemplate) {
     movies.forEach(element => {
         temp.push(getQuiz2(element,questionTemplate));
     });
-
+    if(temp.length > 5){
+        temp = temp.slice(0, 5);
+    }
     return temp;
 }  
 function getQuiz2(movie,template) {
