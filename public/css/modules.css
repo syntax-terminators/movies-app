@@ -19,7 +19,7 @@ aside>a>div>p{
 }
 
 aside>div:hover {
-background-color: #23408B;
+background-color: #BF2119;
 }
 
 #filter , #f{
@@ -72,6 +72,7 @@ background-color: #23408B;
     width: 20vw;
     display: inline-flex;
     justify-content: flex-end;
+    z-index: 2;
 }
 .social-media>*{
     padding: 1% 4%;
@@ -147,7 +148,7 @@ background-color: #23408B;
 }
 
 .active, .btn:hover {
-    background-color: rgb(49, 91, 226);
+    background-color: #BF2119;
     color: white;
   }
 
