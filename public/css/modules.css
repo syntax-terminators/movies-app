@@ -201,6 +201,7 @@ background-color: #BF2119;
 .singleImg {
     max-width: 40vw;
     max-height: 40vw;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 1), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 #display {
@@ -220,6 +221,9 @@ background-color: #BF2119;
     font-family: 'Poppins', sans-serif;
 }
 
+.actorshad{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 1), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
 /* #add {
     border-radius: 1%;
     border: none;
@@ -501,7 +505,7 @@ section.display-actors>section>ul p{
 /*Library*/
 .take-quiz-container{
     padding: 8px;
-    background: #292D35;
+    /* background: #292D35; */
     width: 100%;
     text-align: center;
 }

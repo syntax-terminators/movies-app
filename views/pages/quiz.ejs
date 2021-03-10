@@ -30,9 +30,9 @@
 
                                 <% question.choises.forEach(choice=> { %>
                                     <div class="choice-block">
-                                        <input type="radio" name=<%=`question${i}${j}`%> value="<%= choice %>" required>
+                                        <input id="<%= choice %>" type="radio" name=<%=`question${i}${j}`%> value="<%= choice %>" required>
                                         &nbsp;
-                                        <label for="<% choice %>">
+                                        <label for="<%= choice %>">
                                             <%= choice %>
                                         </label>
                                         <br>
