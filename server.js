@@ -118,16 +118,30 @@ function quizScoreHandler(req,res) {
     console.log("choice ",correctChoice);
     let total=0;
     userChoice.forEach((x,i)=>{
-        if(i+1%3==0){//actors array
-            if(correctChoice[i].includes(x))total++;
+        if(typeof correctChoice[i] === 'object'){
+            if(correctChoice[i].includes(x.toString())){
+                total ++;
+            }
+        } else{
+            if(x==correctChoice[i])total++;
         }
-        if(x==correctChoice[i])total++;
+        // if(i+1%3==0){//actors array
+        //     if(correctChoice[i].includes(x.toString()))total++;
+        // }
+        // if(x==correctChoice[i])total++;
         
     })
-    total=((total/(userChoice.length)).toFixed(1))*100
-    console.log("user score: "+total+"%")
-
-    
+    console.log('total', total)
+    // total=((total/(userChoice.length)).toFixed(1))*100
+    // res.redirect(`/library?score=${total}`)
+    let deleteScore = 'DELETE FROM score;';
+    client.query(deleteScore).then(() =>{
+        let addScore = 'INSERT INTO score(score) VALUES($1);';
+        client.query(addScore, [total]).then(() =>{
+            console.log('score added to the database')
+        }).catch(error => res.render('error'))
+    })
+    res.redirect('/library');
 }
 
 
@@ -363,12 +377,14 @@ quizList.forEach(questions =>{
        if(typeof question.correctChoice !=typeof {}){
         if(!question.choises.includes(question.correctChoice))
         question.choises.push(question.correctChoice);
+        question.choises = shuffleArray(question.choises)
         return question
        }else{
         //    let randomActor=question.correctChoice[getRandom(question.correctChoice.length)];
         let randomActor=question.correctChoice[0];
            if(!question.choises.includes(randomActor))
             question.choises.push(randomActor);
+            question.choises = shuffleArray(question.choises)
             return question  
        }
     })
@@ -380,7 +396,10 @@ function getQuizList(movies,questionTemplate) {
     movies.forEach(element => {
         temp.push(getQuiz2(element,questionTemplate));
     });
-
+    temp = shuffleArray(temp);
+    if(temp.length > 5){
+        temp = temp.slice(0, 5);
+    }
     return temp;
 }  
 function getQuiz2(movie,template) {
@@ -418,7 +437,6 @@ function getQuestionList(movie,template) {
             };
         })
     })
-
     return temp;
 }
 function saveMovies(req, res) {
@@ -454,7 +472,15 @@ function renderMovies(req, res) {
     let SQL = `SELECT * FROM movie;`;
     client.query(SQL)
         .then(data => {
-            res.render('pages/library', { moviesList: data.rows });
+            let getScoreQuery = 'SELECT * FROM score'
+            client.query(getScoreQuery).then(score =>{
+                if(score.rows.length >= 1){
+                    res.render('pages/library', { moviesList: data.rows, score: score.rows[0].score});
+                } else{
+                    res.render('pages/library', { moviesList: data.rows});
+                }
+            }).catch()
+            
         }).catch(error => {
             console.log(error);
             res.render("error", { error: error });
@@ -485,6 +511,13 @@ function getRandomYear() {
         if(temp.length==6)break;
     }
     return temp;
+}
+function shuffleArray(array) { // Durstenfeld shuffle 
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array
 }
 
 /***************************************************
