@@ -37,6 +37,9 @@
                             </a>
                             <% }) %>
                     </section>
+                    <% if (typeof score !== 'undefined') { %>
+                        <h3 class="score">Yor Score is :<%= score %> out of <%= moviesList.length > 5 ? 5*3 : moviesList.length * 3%> </h3>
+                    <% } %>
                 </section>
         </main>
         <%- include('../partial/scripts') %>

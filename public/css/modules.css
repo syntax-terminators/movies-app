@@ -7,6 +7,7 @@ aside>a>div{
     align-items: center;
     box-sizing: border-box;
     width:100%;
+    font-family: cursive;
 }
 aside>a>div>*{
     padding:7%;
@@ -27,7 +28,7 @@ background-color: #BF2119;
     align-items:stretch;
     height: 5vh;
     padding: 0.5%;
-    background: #292D35;
+    /* background: #292D35; */
     width:100%;
     justify-content: space-between;
 }
@@ -41,6 +42,7 @@ background-color: #BF2119;
     margin: 0 0.75%;
     background: #2a2b2d;
     color: white;
+    font-family: cursive;
 }
 .search{
     width: 20vw;
@@ -123,6 +125,8 @@ background-color: #BF2119;
 
 .movie{
     padding: 0.5%;
+    padding-top: 2%;
+    padding-bottom: 2%;
 }
 
 .movie>section>img{
@@ -132,9 +136,11 @@ background-color: #BF2119;
 .movie>section>p{
     margin: 0 auto;
     color: whitesmoke;
-    font-size: 2vh;
+    font-size: 3vh;
     max-width: 12vw;
     text-align: center;
+    font-family: cursive;
+    /* background-color: slategray; */
 }
 
 /**************************************** active mode */
@@ -490,9 +496,17 @@ section.display-actors>section>ul p{
 }
 
 .question-block{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     padding: 8px;
-    background-color: white;
-    box-shadow: 1px 3px #888888;
+    background-color: #c0cff560;
+    /* box-shadow: 1px 3px #888888; */
+    border-radius: 3%;
+    /* background-image: url(https://www.wallpapertip.com/wmimgs/94-948582_light-colorful-background-hd.jpg); */
+    background-size: cover;
+    color: rgb(236, 229, 229);
+    font-size:40px;
+    border: 5px;
+    
 }
 .question-block{
     display: flex;
@@ -507,7 +521,7 @@ section.display-actors>section>ul p{
 
 #AddBtn {
     position: relative;
-    background-color: #5ca2ca;
+    background-color: #206d99;
     border: none;
     font-size: 28px;
     color: #FFFFFF;
@@ -519,6 +533,7 @@ section.display-actors>section>ul p{
     text-decoration: none;
     overflow: hidden;
     cursor: pointer;
+    border-radius: 5%;
 }
 
 #AddBtn:after {
@@ -539,4 +554,20 @@ section.display-actors>section>ul p{
     margin: 0;
     opacity: 1;
     transition: 0s
+  }
+  .score{
+    position: relative;
+    background-color: #206d99;
+    border: none;
+    font-size: 28px;
+    color: #FFFFFF;
+    padding: 20px;
+    width: 200px;
+    text-align: center;
+    -webkit-transition-duration: 0.4s; 
+    transition-duration: 0.4s;
+    text-decoration: none;
+    overflow: hidden;
+    cursor: pointer;
+    border-radius: 5%;
   }
