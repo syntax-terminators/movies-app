@@ -8,6 +8,7 @@ const pg = require("pg");
 const superAgent = require("superagent");
 const override = require('method-override');
 const { Template } = require('ejs');
+const { del } = require('superagent');
 
 /***************************************************
 *****************Configuration**********************
@@ -303,8 +304,11 @@ function getDelete(req, res){
             let SQL = 'DELETE FROM movie WHERE id=$1';
             client.query(SQL, values)
                 .then(data=>{
-                    
-                    res.redirect('../library')
+                    let deleteScore = 'DELETE FROM score;'
+                    client.query(deleteScore).then(() =>{
+                        console.log('score reset')
+                        res.redirect('../library')
+                    }).catch(error => res.render('error', {error: error})) 
                 })
                 .catch(error => {
                     console.log(error);
@@ -452,6 +456,10 @@ function saveMovies(req, res) {
             let SQL2 = `INSERT INTO actors(image, name, moviesid) VALUES ($1, $2, $3)`
             client.query(SQL2, values2)
                 .then((data) => {
+                    let deleteScore = 'DELETE FROM score;'
+                    client.query(deleteScore).then(()=>{
+                        console.log('score reset')
+                    }).catch(error => res.render('error', {error: error}))
                 }).catch(error => {
                     console.log(error);
                     res.render("error", { error: error });
