@@ -7,6 +7,7 @@ const dotenv = require('dotenv');
 const pg = require("pg");
 const superAgent = require("superagent");
 const override = require('method-override');
+const { Template } = require('ejs');
 
 /***************************************************
 *****************Configuration**********************
@@ -57,6 +58,8 @@ app.get("/details2/:id", details2PageHandler);
 
 //  DELETE MOVIES 
 app.delete("/delete/:movie_id", deletemovie);
+// QUIZZ SCORE
+app.get("/quiz/score", quizScoreHandler);
 
 
 
@@ -95,6 +98,35 @@ function details2PageHandler(req, res) {
 }
 function deletemovie(req, res) {
     getDelete(req, res);
+}
+function quizScoreHandler(req,res) {
+    let quiz=JSON.parse(req.query.quizes)
+    //console.log(quiz);
+    let correctChoice=[];
+    quiz.forEach(x=>{
+        x.forEach(u=>{
+            correctChoice.push(u.correctChoice)
+        }); 
+    });
+
+    console.log("*************************");
+    let userChoice=Object.values(req.query);
+    userChoice.length=userChoice.length-1;
+    console.log(userChoice);
+    console.log("*************************");
+    console.log("choice ",correctChoice);
+    let total=0;
+    userChoice.forEach((x,i)=>{
+        if(i+1%3==0){//actors array
+            if(correctChoice[i].includes(x))total++;
+        }
+        if(x==correctChoice[i])total++;
+        
+    })
+    total=((total/(userChoice.length)).toFixed(1))*100
+    console.log("user score: "+total+"%")
+
+    
 }
 
 
@@ -271,13 +303,13 @@ function getDelete(req, res){
 
 }
 function getQuiz(req,res) {
-   let SQL=`Select * from movie JOIN actors ON movie.id=actors.moviesid `;
+   let SQL=`SELECT * FROM movie`;
     client.query(SQL)
         .then(data => {
-         getFormatedMoviesList(data.rows)
-       //res.send(data.rows);
+        formatMoviesList(data.rows,res);
+       // res.send(data.rows);
         }).catch(error => {
-            console.log(error);
+            //console.log(error);
             res.render("error", { error: error });
         });
 }
@@ -286,11 +318,107 @@ function getQuiz(req,res) {
 /***************************************************
 *****************HELPER*****************************
 ****************************************************/
-function getFormatedMoviesList(movies) {
+function formatMoviesList(movies,res) {
     let temp=[];
+    let sql=`SELECT name FROM actors WHERE moviesid=$1 `
+    movies.forEach(x=>{
+        let safeValue=[x.id];
+        client.query(sql,safeValue).then(data=>{
+            let actors=data.rows.map(x=>x.name);
+            var movie={
+                name:x.title,
+                rating:x.rating,
+                date:new Date(x.date).getFullYear().toString(),
+                actors:actors
+            }
+            temp.push(movie);
+            if(temp.length==movies.length){//final movie
+                generateQuiz(res,temp);
+            };
+        })
+    });
+}
+function generateQuiz(res,temp) {
+    const questionTemplate={
+        rating:{
+            question:'what is the rating of the ',
+            choises:getRandomRatingArray()
+        },
+        date :{
+            question:'what is the date of the ',
+            choises:getRandomYear()
+        },
+        actors:{
+            question:"one of the following actors act in the ",
+            choises:["Alain Moussi","Eddie Steeples","Yang Yang","Scarlet johanson","Jackie Chan","Al Pacino","William Hanna"]
+        }    
+}
 
+let quizList=getQuizList(temp,questionTemplate);
 
+quizList.forEach(questions =>{
+    questions.map(question =>{
+       
+       if(typeof question.correctChoice !=typeof {}){
+        if(!question.choises.includes(question.correctChoice))
+        question.choises.push(question.correctChoice);
+        return question
+       }else{
+        //    let randomActor=question.correctChoice[getRandom(question.correctChoice.length)];
+        let randomActor=question.correctChoice[0];
+           if(!question.choises.includes(randomActor))
+            question.choises.push(randomActor);
+            return question  
+       }
+    })
+})
+res.render('pages/quiz', {quizes: quizList});
+}
+function getQuizList(movies,questionTemplate) {
+    var temp=[]
+    movies.forEach(element => {
+        temp.push(getQuiz2(element,questionTemplate));
+    });
+
+    return temp;
+}  
+function getQuiz2(movie,template) {
+    var questions=getQuestionList(movie,template);
+    return questions;
+}
+function getQuestionList(movie,template) {
+    let temp=[];
+    // console.log("template : ",template);
     
+    let questionsNumber=Object.entries(template).length;
+    
+    let moviesKeys=Object.keys(movie);
+    let templateKeys=Object.keys(template);
+    moviesKeys.forEach(x=>{
+        templateKeys.forEach(y=>{
+            if(x==y){
+                //x== actors
+                //
+                
+                let choises=template[y].choises;
+                let header=template[y].question;
+                let correctChoice=movie[x];
+                
+                
+                 //console.log(movie)
+                var question={
+                    header:header+movie.name+" movie?",
+                    choises:choises,
+                    correctChoice:correctChoice
+                }
+               //console.log("choices=: ",choises)
+                temp.push(JSON.parse(JSON.stringify(question)));
+                
+            };
+        })
+    })
+
+    return temp;
 }
 function saveMovies(req, res) {
     let SQL = `INSERT INTO movie(id,title, date, rating, poster, description) VALUES ($1, $2, $3, $4, $5, $6)`
@@ -321,7 +449,6 @@ function saveMovies(req, res) {
 
 
 }
-
 function renderMovies(req, res) {
     let SQL = `SELECT * FROM movie;`;
     client.query(SQL)
@@ -332,7 +459,32 @@ function renderMovies(req, res) {
             res.render("error", { error: error });
         });
 }
-
+function getRandom(max) {
+  return  Math.floor(Math.random() * max)
+}
+function getFloatRandom(max) {
+    return  (Math.random() * max).toFixed(1);
+}
+function getRandomRatingArray(){
+    let temp=[];
+    for (let index = 0; index < 30; index++) {
+        let rand=getFloatRandom(10)
+        if(!temp.includes(rand))
+        temp.push(rand.toString())
+        if(temp.length==6)break;
+    }
+    return temp;
+}
+function getRandomYear() {
+    let temp=[];
+    for (let index = 0; index < 30; index++) {
+        let rand=Math.floor(Math.random() * 41) + 1980;
+        if(!temp.includes(rand.toString()))
+        temp.push(rand.toString())
+        if(temp.length==6)break;
+    }
+    return temp;
+}
 
 /***************************************************
 *****************DATA MODEL*************************
