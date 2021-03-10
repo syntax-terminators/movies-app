@@ -537,6 +537,7 @@ function Movie(movie) {
     this.rating = movie.vote_average || 'Not Available';
     this.poster = movie.poster_path ? "https://image.tmdb.org/t/p/w500" + movie.poster_path : '../img/default-poster.png'
     this.date = movie.release_date || 'Not Available';
+    this.cover = movie.backdrop_path || 'Not Available';
 
 }
 function Actor(actor){

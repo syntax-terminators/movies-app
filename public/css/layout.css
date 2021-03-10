@@ -1,6 +1,8 @@
 aside{
     width:120px;
-    background-color: #292D35;
+    /* background-color: #292D35; */
+    background-color: #030024;
+
     display:flex;
     flex-direction: column;
     height:100%;
@@ -11,9 +13,15 @@ nav{
     display:flex;
     justify-content: space-between;
     align-items: center;
+    
+    background: rgb(3,0,36);
+    background: linear-gradient(10deg, rgba(3,0,36,1) 0%, rgba(191,33,25,1) 60%);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 1), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+
 }
 
-header::after { 
+/* header::after {
     background-color: #BF2119;
     content: '';
     display: inline-block;
@@ -26,5 +34,5 @@ header::after {
     border-radius: 0 0 0 100%;
 
 
-}
+} */
 
