@@ -1,18 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+
 </head>
+
 <body>
-    quiz
     <%- include('../partial/header')%>
-    <main>
-        <aside>
-            <%- include('../partial/nav')%> 
-        </aside>
-    </main>
+        <main>
+            <%- include('../partial/aside')%>
+                <form class='quiz-form' action="/quiz/score" method="GET">
+                   
+                    
+                    <% quizes.forEach((quiz,j)=> { %>
+                        <% quiz.forEach((question, i)=> { %>
+                            <div class="question-block">
+                                <h3>
+                                    <%= question.header %>
+                                </h3>
+                                <br><br>
+                               
+
+                                <% question.choises.forEach(choice=> { %>
+                                    <div class="choice-block">
+                                        <input type="radio" name=<%=`question${i}${j}`%> value="<%= choice %>" required>
+                                        &nbsp;
+                                        <label for="<% choice %>">
+                                            <%= choice %>
+                                        </label>
+                                        <br>
+                                        <br>
+                                    </div>
+                                <% }) %>
+                            
+                            </div>
+                            <br>
+                        <% }) %>
+                    <% }) %>
+                    <input type="hidden" name="quizes" value="<%=JSON.stringify(quizes)%>">
+                    <input type="submit">
+                </form>
+        </main>
+        <%- include('../partial/scripts') %>
+        <script>
+            
+        </script>
 </body>
+
 </html>
