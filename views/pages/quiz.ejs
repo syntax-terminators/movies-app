@@ -16,9 +16,8 @@
     <%- include('../partial/header')%>
         <main>
             <%- include('../partial/aside')%>
-                <form class='quiz-form' action="/quiz/score" method="GET">
-                   
-                    
+
+                <!-- <form class='quiz-form' action="/quiz/score" method="GET">  
                     <% quizes.forEach((quiz,j)=> { %>
                         <% quiz.forEach((question, i)=> { %>
                             <div class="question-block">
@@ -26,11 +25,9 @@
                                     <%= question.header %>
                                 </h3>
                                 <br><br>
-                               
-
                                 <% question.choises.forEach(choice=> { %>
                                     <div class="choice-block">
-                                        <input id="<%= choice %>" type="radio" name=<%=`question${i}${j}`%> value="<%= choice %>" required>
+                                        <input type="radio" name=<%=`question${i}${j}`%> value="<%= choice %>" required>
                                         &nbsp;
                                         <label for="<%= choice %>">
                                             <%= choice %>
@@ -39,14 +36,43 @@
                                         <br>
                                     </div>
                                 <% }) %>
-                            
                             </div>
                             <br>
                         <% }) %>
                     <% }) %>
                     <input type="hidden" name="quizes" value="<%=JSON.stringify(quizes)%>">
                     <input type="submit"id="AddBtn">
-                </form>
+                </form> -->
+
+<!-- _____________________________________________________________________ -->
+
+
+            <form class='quiz-form' action="/quiz/score" method="GET">
+                    <% quizes.forEach((quiz,j)=> { %>
+                    <% quiz.forEach((question, i)=> { %>
+                <div class="container00">
+                    <h2 class="questionhead"><%= question.header %></h2>
+                  <ul class="ulquiz">
+                    <% question.choises.forEach((choice,f)=> { %>
+                  <li>
+                    <input id="<%= choice %><%= f %>" type="radio"  name=<%=`question${i}${j}`%> value="<%= choice %>" required>
+                    <label for="<%= choice %><%= f %>"><%= choice %></label>
+                    <div class="check"></div>
+                  </li>
+                  <% }) %>
+                </ul>
+                </div>
+                <% }) %>
+                <% }) %>
+                <input type="hidden" name="quizes" value="<%=JSON.stringify(quizes)%>">
+                <input type="submit"id="AddBtn">
+            </form>
+
+
+
+
+
+
         </main>
         <%- include('../partial/scripts') %>
         <script>
