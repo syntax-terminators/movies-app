@@ -21,7 +21,9 @@ header{
     display:flex;
     flex-direction: column;
     justify-content: center;
-    background-color: #2a2b2d;
+    /* background-color: #222833; */
+    background-color: #181c2f;
+    /* background-color: #161a2f; */
     color:white;
 }
 
