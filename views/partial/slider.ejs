@@ -96,38 +96,40 @@ body {font-family: Verdana, sans-serif;}
 
 <div class="slideshow-container">
 
-<div class="mySlides fade">
-  <div class="numbertext"><%= movies[0].title %></div>
-  <a href="../details/<%= movies[0].movieID%>">
-  <img class="simg" src="https://image.tmdb.org/t/p/w500<%= movies[0].cover %>" style="width:100%">
-  </a>
-  <!-- <div class="text">Caption Text</div> -->
-</div>
-
-<div class="mySlides fade">
-    <div class="numbertext"><%= movies[1].title %></div>
-    <a href="./details/<%= movies[1].movieID%>">
-    <img class="simg" src="https://image.tmdb.org/t/p/w500<%= movies[1].cover %>" style="width:100%">
+<% if (movies.length >= 3) { %>
+  <div class="mySlides fade">
+    <div class="numbertext"><%= movies[0].title %></div>
+    <a href="../details/<%= movies[0].movieID%>">
+    <img class="simg" src="https://image.tmdb.org/t/p/w500<%= movies[0].cover %>" style="width:100%">
     </a>
-  <!-- <div class="text">Caption Two</div> -->
-</div>
-
-<div class="mySlides fade">
-    <div class="numbertext"><%= movies[2].title %></div>
-    <a href="../details/<%= movies[2].movieID%>">
-    <img class="simg" src="https://image.tmdb.org/t/p/w500<%= movies[2].cover %>" style="width:100%">
-    </a>
-  <!-- <div class="text">Caption Three</div> -->
-</div>
-
-</div>
-<br>
-
-<div class="dots" style="text-align:center">
-  <span class="dot"></span> 
-  <span class="dot"></span> 
-  <span class="dot"></span> 
-</div>
+    <!-- <div class="text">Caption Text</div> -->
+  </div>
+  
+  <div class="mySlides fade">
+      <div class="numbertext"><%= movies[1].title %></div>
+      <a href="./details/<%= movies[1].movieID%>">
+      <img class="simg" src="https://image.tmdb.org/t/p/w500<%= movies[1].cover %>" style="width:100%">
+      </a>
+    <!-- <div class="text">Caption Two</div> -->
+  </div>
+  
+  <div class="mySlides fade">
+      <div class="numbertext"><%= movies[2].title %></div>
+      <a href="../details/<%= movies[2].movieID%>">
+      <img class="simg" src="https://image.tmdb.org/t/p/w500<%= movies[2].cover %>" style="width:100%">
+      </a>
+    <!-- <div class="text">Caption Three</div> -->
+  </div>
+  
+  </div>
+  <br>
+  
+  <div class="dots" style="text-align:center">
+    <span class="dot"></span> 
+    <span class="dot"></span> 
+    <span class="dot"></span> 
+  </div>  
+<% } %>
 
 <script>
 var slideIndex = 0;
