@@ -1,18 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+
 </head>
+
 <body>
-    library
     <%- include('../partial/header')%>
-    <main>
-        <aside>
-            <%- include('../partial/nav')%> 
-        </aside>
-    </main>
+        <main>
+            <%- include('../partial/aside') %>
+            
+                <section class='container'>
+                    <div class="take-quiz-container">
+                        <form action="/quiz" method="GET">
+                        <button id="take_quiz">Take Quiz Now</button>
+                        </form>
+                    </div>
+                    <section class='display-cards'>
+                        <% moviesList.forEach(movie=> { %>
+
+                            <a class='movie' href="../details2/<%= movie.id%>">
+                                <section id="renenderImg">
+                                    <img src="<%= movie.poster %>" alt="">
+                                    <p>
+                                        <%= movie.title %>
+                                    </p>
+
+                                </section>
+                            </a>
+                            <% }) %>
+                    </section>
+                </section>
+        </main>
+        <%- include('../partial/scripts') %>
+            <script>
+                var change = document.getElementById('library11');
+                change.style.backgroundColor = "rgb(49, 91, 226)";
+                change.style.color = "white";
+                console.log(change);
+            </script>
 </body>
+
 </html>

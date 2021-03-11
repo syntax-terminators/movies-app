@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+
+<body>
+
+    <%- include('../partial/header')%>
+        <main>
+            <%- include('../partial/aside')%>
+
+
+                <section class="all" id="all">
+                    <section class="container">
+                        <section id="f">
+                            <p> Details</p>
+                        </section>
+                    </section>
+                    <section id="display">
+
+                        <section id="cont">
+                            <div class = "movie-image">
+                                <img class="singleImg" src="<%= movie.poster %>" alt=""> 
+                            </div>
+                           
+                            <div class="movie-info">
+                                <h2 class = 'movie-title'>
+                                    <%=movie.title %>
+                                    <hr style="text-align:left;margin-left:0">
+    
+                                </h2>
+                                <h2>
+                                    <%=movie.description %>
+                                        <hr style="width:50%;text-align:left;margin-left:0">
+                                </h2>
+                                <h2>
+                                    <%=movie.rating %>
+                                        <hr style="width:50%;text-align:left;margin-left:0">
+                                </h2>
+                                <h2>
+                                    <%=movie.date %>
+                                        <hr style="width:50%;text-align:left;margin-left:0">
+                                </h2>
+                            </div>
+                        
+                        </section>
+
+                        <section class='display-actors'>
+                            <section class='actors-container'>
+
+                                <% actors.forEach(actor=> { %>
+
+                                    <ul>
+                                        <li><img src="<%= actor.image %>" alt=""></li>
+                                        <li>
+                                            <%= actor.name %>
+                                        </li>
+                                    </ul>
+                                    <% }) %>
+                            </section>
+
+
+
+                        </section>
+
+                        <form style="text-align: center;" action="<%=`/delete/${movie.id}?_method=DELETE`%>"
+                            method="POST">
+                            <button id="Button" type="submit"> DELETE MOVIE </button>
+                        </form>
+                        <br>
+                        <br>
+
+                        <!-- <button id="add">
+                            Add to library
+                        </button> -->
+                    </section>
+
+
+
+
+
+                    <%- include('../partial/scripts') %>
+
+        </main>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <script src="https://kit.fontawesome.com/c8e4d183c2.js" crossorigin="anonymous"></script>
+        <script src="./js/app.js"></script>
+        <script>
+            var change = document.getElementById('details11');
+            change.style.backgroundColor = "rgb(49, 91, 226)";
+            change.style.color = "white";
+            console.log(change);
+        </script>
+</body>
+
+</html>
