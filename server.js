@@ -17,8 +17,8 @@ const { del } = require('superagent');
 dotenv.config();
 const app = express();
 app.use(cors());
-const client = new pg.Client(process.env.DATABASE_URL);
-//const client = new pg.Client({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });//heroko
+// const client = new pg.Client(process.env.DATABASE_URL);
+const client = new pg.Client({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });//heroko
 
 app.use(express.static('./public'));
 app.use(express.urlencoded({ extended: true }));
