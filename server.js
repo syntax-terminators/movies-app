@@ -1,3 +1,4 @@
+
 /***************************************************
 *****************Dependencies***********************
 ****************************************************/
@@ -8,6 +9,7 @@ const pg = require("pg");
 const superAgent = require("superagent");
 const override = require('method-override');
 const { Template } = require('ejs');
+const { del } = require('superagent');
 
 /***************************************************
 *****************Configuration**********************
@@ -51,7 +53,7 @@ app.get("/about", aboutHandler);
 app.get("/top", topHandler);
 
 // ADD MOVIES TO DB
-app.post("/add",addMoviesHandler);
+app.post("/add", addMoviesHandler);
 
 // DETAILS PAGE 2
 app.get("/details2/:id", details2PageHandler);
@@ -78,8 +80,8 @@ function libraryPageHandler(req, res) {
     renderMovies(req, res);
 }
 function quizPageHandler(req, res) {
-    getQuiz(req,res);
-   // res.render("pages/quiz");
+    getQuiz(req, res);
+    // res.render("pages/quiz");
 }
 function searchHandler(req, res) {
     getSearchData(req, res)
@@ -99,34 +101,48 @@ function details2PageHandler(req, res) {
 function deletemovie(req, res) {
     getDelete(req, res);
 }
-function quizScoreHandler(req,res) {
-    let quiz=JSON.parse(req.query.quizes)
+function quizScoreHandler(req, res) {
+    let quiz = JSON.parse(req.query.quizes)
     //console.log(quiz);
-    let correctChoice=[];
-    quiz.forEach(x=>{
-        x.forEach(u=>{
+    let correctChoice = [];
+    quiz.forEach(x => {
+        x.forEach(u => {
             correctChoice.push(u.correctChoice)
-        }); 
+        });
     });
 
     console.log("*************************");
-    let userChoice=Object.values(req.query);
-    userChoice.length=userChoice.length-1;
+    let userChoice = Object.values(req.query);
+    userChoice.length = userChoice.length - 1;
     console.log(userChoice);
     console.log("*************************");
-    console.log("choice ",correctChoice);
-    let total=0;
-    userChoice.forEach((x,i)=>{
-        if(i+1%3==0){//actors array
-            if(correctChoice[i].includes(x))total++;
+    console.log("choice ", correctChoice);
+    let total = 0;
+    userChoice.forEach((x, i) => {
+        if (typeof correctChoice[i] === 'object') {
+            if (correctChoice[i].includes(x.toString())) {
+                total++;
+            }
+        } else {
+            if (x == correctChoice[i]) total++;
         }
-        if(x==correctChoice[i])total++;
-        
-    })
-    total=((total/(userChoice.length)).toFixed(1))*100
-    console.log("user score: "+total+"%")
+        // if(i+1%3==0){//actors array
+        //     if(correctChoice[i].includes(x.toString()))total++;
+        // }
+        // if(x==correctChoice[i])total++;
 
-    
+    })
+    console.log('total', total)
+    // total=((total/(userChoice.length)).toFixed(1))*100
+    // res.redirect(`/library?score=${total}`)
+    let deleteScore = 'DELETE FROM score;';
+    client.query(deleteScore).then(() => {
+        let addScore = 'INSERT INTO score(score) VALUES($1);';
+        client.query(addScore, [total]).then(() => {
+            console.log('score added to the database')
+        }).catch(error => res.render('error'))
+    })
+    res.redirect('/library');
 }
 
 
@@ -183,21 +199,21 @@ function getDetailsData(req, res) {
         .get(url)
         .then(data => {
             var movie = new Movie(JSON.parse(data.text));
-            let movieId =req.params.id;
-            let apiUrl=`https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.MOVIE_API_KEY}&language=en-US&append_to_response=credits`
+            let movieId = req.params.id;
+            let apiUrl = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.MOVIE_API_KEY}&language=en-US&append_to_response=credits`
             superAgent
-            .get(apiUrl)
-            .then(data=>{
-                let actors=JSON.parse(data.text).credits.cast;
-                if(actors.length>10)actors.length=10;
-                // console.log(actors)
-                actors = actors.map(actor => new Actor(actor));
-                res.render("pages/details", { movie: movie,actors:actors });
-            })
-            .catch(error=>{
-                res.render("error",{error:error})
-            });
-            
+                .get(apiUrl)
+                .then(data => {
+                    let actors = JSON.parse(data.text).credits.cast;
+                    if (actors.length > 10) actors.length = 10;
+                    // console.log(actors)
+                    actors = actors.map(actor => new Actor(actor));
+                    res.render("pages/details", { movie: movie, actors: actors });
+                })
+                .catch(error => {
+                    res.render("error", { error: error })
+                });
+
         })
         .catch(error => {
             console.log(error);
@@ -272,24 +288,27 @@ function getDetails2Data(req, res) {
         .then(data => {
             let SQL2 = `SELECT * FROM actors WHERE moviesid=$1`;
             client.query(SQL2, values).then(data2 => {
-                res.render("pages/details2", { movie: data.rows[0],actors:data2.rows});
+                res.render("pages/details2", { movie: data.rows[0], actors: data2.rows });
             });
         }).catch(error => {
             console.log(error);
             res.render("error", { error: error });
         });
 }
-function getDelete(req, res){
+function getDelete(req, res) {
 
-        let values = [req.params.movie_id];
-        let SQL2 = 'DELETE FROM actors WHERE moviesid=$1';
-        client.query(SQL2, values)
-        .then(data=>{
+    let values = [req.params.movie_id];
+    let SQL2 = 'DELETE FROM actors WHERE moviesid=$1';
+    client.query(SQL2, values)
+        .then(data => {
             let SQL = 'DELETE FROM movie WHERE id=$1';
             client.query(SQL, values)
-                .then(data=>{
-                    
-                    res.redirect('../library')
+                .then(data => {
+                    let deleteScore = 'DELETE FROM score;'
+                    client.query(deleteScore).then(() => {
+                        console.log('score reset')
+                        res.redirect('../library')
+                    }).catch(error => res.render('error', { error: error }))
                 })
                 .catch(error => {
                     console.log(error);
@@ -302,12 +321,12 @@ function getDelete(req, res){
         });
 
 }
-function getQuiz(req,res) {
-   let SQL=`SELECT * FROM movie`;
+function getQuiz(req, res) {
+    let SQL = `SELECT * FROM movie`;
     client.query(SQL)
         .then(data => {
-        formatMoviesList(data.rows,res);
-       // res.send(data.rows);
+            formatMoviesList(data.rows, res);
+            // res.send(data.rows);
         }).catch(error => {
             //console.log(error);
             res.render("error", { error: error });
@@ -318,126 +337,134 @@ function getQuiz(req,res) {
 /***************************************************
 *****************HELPER*****************************
 ****************************************************/
-function formatMoviesList(movies,res) {
-    let temp=[];
-    let sql=`SELECT name FROM actors WHERE moviesid=$1 `
-    movies.forEach(x=>{
-        let safeValue=[x.id];
-        client.query(sql,safeValue).then(data=>{
-            let actors=data.rows.map(x=>x.name);
-            var movie={
-                name:x.title,
-                rating:x.rating,
-                date:new Date(x.date).getFullYear().toString(),
-                actors:actors
+function formatMoviesList(movies, res) {
+    let temp = [];
+    let sql = `SELECT name FROM actors WHERE moviesid=$1 `
+    movies.forEach(x => {
+        let safeValue = [x.id];
+        client.query(sql, safeValue).then(data => {
+            let actors = data.rows.map(x => x.name);
+            var movie = {
+                name: x.title,
+                rating: x.rating,
+                date: new Date(x.date).getFullYear().toString(),
+                actors: actors
             }
             temp.push(movie);
-            if(temp.length==movies.length){//final movie
-                generateQuiz(res,temp);
+            if (temp.length == movies.length) {//final movie
+                generateQuiz(res, temp);
             };
         })
     });
 }
-function generateQuiz(res,temp) {
-    const questionTemplate={
-        rating:{
-            question:'what is the rating of the ',
-            choises:getRandomRatingArray()
+function generateQuiz(res, temp) {
+    const questionTemplate = {
+        rating: {
+            question: 'what is the rating of the ',
+            choises: getRandomRatingArray()
         },
-        date :{
-            question:'what is the date of the ',
-            choises:getRandomYear()
+        date: {
+            question: 'what is the date of the ',
+            choises: getRandomYear()
         },
-        actors:{
-            question:"one of the following actors act in the ",
-            choises:["Alain Moussi","Eddie Steeples","Yang Yang","Scarlet johanson","Jackie Chan","Al Pacino","William Hanna"]
-        }    
-}
+        actors: {
+            question: "one of the following actors act in the ",
+            choises: ["Alain Moussi", "Eddie Steeples", "Yang Yang", "Scarlet johanson", "Jackie Chan", "Al Pacino", "William Hanna"]
+        }
+    }
 
-let quizList=getQuizList(temp,questionTemplate);
+    let quizList = getQuizList(temp, questionTemplate);
 
-quizList.forEach(questions =>{
-    questions.map(question =>{
-       
-       if(typeof question.correctChoice !=typeof {}){
-        if(!question.choises.includes(question.correctChoice))
-        question.choises.push(question.correctChoice);
-        return question
-       }else{
-        //    let randomActor=question.correctChoice[getRandom(question.correctChoice.length)];
-        let randomActor=question.correctChoice[0];
-           if(!question.choises.includes(randomActor))
-            question.choises.push(randomActor);
-            return question  
-       }
+    quizList.forEach(questions => {
+        questions.map(question => {
+
+            if (typeof question.correctChoice != typeof {}) {
+                if (!question.choises.includes(question.correctChoice))
+                    question.choises.push(question.correctChoice);
+                question.choises = shuffleArray(question.choises)
+                return question
+            } else {
+                //    let randomActor=question.correctChoice[getRandom(question.correctChoice.length)];
+                let randomActor = question.correctChoice[0];
+                if (!question.choises.includes(randomActor))
+                    question.choises.push(randomActor);
+                question.choises = shuffleArray(question.choises)
+                return question
+            }
+        })
     })
-})
-res.render('pages/quiz', {quizes: quizList});
+    res.render('pages/quiz', { quizes: quizList });
 }
-function getQuizList(movies,questionTemplate) {
-    var temp=[]
+function getQuizList(movies, questionTemplate) {
+    var temp = []
     movies.forEach(element => {
-        temp.push(getQuiz2(element,questionTemplate));
+        temp.push(getQuiz2(element, questionTemplate));
     });
-
+    temp = shuffleArray(temp);
+    if (temp.length > 5) {
+        temp = temp.slice(0, 5);
+    }
     return temp;
-}  
-function getQuiz2(movie,template) {
-    var questions=getQuestionList(movie,template);
+}
+function getQuiz2(movie, template) {
+    var questions = getQuestionList(movie, template);
     return questions;
 }
-function getQuestionList(movie,template) {
-    let temp=[];
+function getQuestionList(movie, template) {
+    let temp = [];
     // console.log("template : ",template);
-    
-    let questionsNumber=Object.entries(template).length;
-    
-    let moviesKeys=Object.keys(movie);
-    let templateKeys=Object.keys(template);
-    moviesKeys.forEach(x=>{
-        templateKeys.forEach(y=>{
-            if(x==y){
+
+    let questionsNumber = Object.entries(template).length;
+
+    let moviesKeys = Object.keys(movie);
+    let templateKeys = Object.keys(template);
+    moviesKeys.forEach(x => {
+        templateKeys.forEach(y => {
+            if (x == y) {
                 //x== actors
                 //
-                
-                let choises=template[y].choises;
-                let header=template[y].question;
-                let correctChoice=movie[x];
-                
-                
-                 //console.log(movie)
-                var question={
-                    header:header+movie.name+" movie?",
-                    choises:choises,
-                    correctChoice:correctChoice
+
+                let choises = template[y].choises;
+                let header = template[y].question;
+                let correctChoice = movie[x];
+
+
+                //console.log(movie)
+                var question = {
+                    header: header + movie.name + " movie?",
+                    choises: choises,
+                    correctChoice: correctChoice
                 }
-               //console.log("choices=: ",choises)
+                //console.log("choices=: ",choises)
                 temp.push(JSON.parse(JSON.stringify(question)));
-                
+
             };
         })
     })
-
     return temp;
 }
 function saveMovies(req, res) {
     let SQL = `INSERT INTO movie(id,title, date, rating, poster, description) VALUES ($1, $2, $3, $4, $5, $6)`
     let reqBody = req.body;
-    let values = [reqBody.movieID,reqBody.title, reqBody.date, reqBody.rating, reqBody.poster, reqBody.description];
+    let values = [reqBody.movieID, reqBody.title, reqBody.date, reqBody.rating, reqBody.poster, reqBody.description];
 
     client.query(SQL, values)
         .then((data) => {
             let actorsjson = JSON.parse(req.body.actors);
-            actorsjson.forEach(actor=>{
-            let values2 = [actor.poster,actor.name,reqBody.movieID];
-            let SQL2 = `INSERT INTO actors(image, name, moviesid) VALUES ($1, $2, $3)`
-            client.query(SQL2, values2)
-                .then((data) => {
-                }).catch(error => {
-                    console.log(error);
-                    res.render("error", { error: error });
-                });
-        
+            actorsjson.forEach(actor => {
+                let values2 = [actor.poster, actor.name, reqBody.movieID];
+                let SQL2 = `INSERT INTO actors(image, name, moviesid) VALUES ($1, $2, $3)`
+                client.query(SQL2, values2)
+                    .then((data) => {
+                        let deleteScore = 'DELETE FROM score;'
+                        client.query(deleteScore).then(() => {
+                            console.log('score reset')
+                        }).catch(error => res.render('error', { error: error }))
+                    }).catch(error => {
+                        console.log(error);
+                        res.render("error", { error: error });
+                    });
+
             }); res.redirect('/library');
 
         }).catch(error => {
@@ -453,37 +480,52 @@ function renderMovies(req, res) {
     let SQL = `SELECT * FROM movie;`;
     client.query(SQL)
         .then(data => {
-            res.render('pages/library', { moviesList: data.rows });
+            let getScoreQuery = 'SELECT * FROM score'
+            client.query(getScoreQuery).then(score => {
+                if (score.rows.length >= 1) {
+                    res.render('pages/library', { moviesList: data.rows, score: score.rows[0].score });
+                } else {
+                    res.render('pages/library', { moviesList: data.rows });
+                }
+            }).catch()
+
         }).catch(error => {
             console.log(error);
             res.render("error", { error: error });
         });
 }
 function getRandom(max) {
-  return  Math.floor(Math.random() * max)
+    return Math.floor(Math.random() * max)
 }
 function getFloatRandom(max) {
-    return  (Math.random() * max).toFixed(1);
+    return (Math.random() * max).toFixed(1);
 }
-function getRandomRatingArray(){
-    let temp=[];
+function getRandomRatingArray() {
+    let temp = [];
     for (let index = 0; index < 30; index++) {
-        let rand=getFloatRandom(10)
-        if(!temp.includes(rand))
-        temp.push(rand.toString())
-        if(temp.length==6)break;
+        let rand = getFloatRandom(10)
+        if (!temp.includes(rand))
+            temp.push(rand.toString())
+        if (temp.length == 6) break;
     }
     return temp;
 }
 function getRandomYear() {
-    let temp=[];
+    let temp = [];
     for (let index = 0; index < 30; index++) {
-        let rand=Math.floor(Math.random() * 41) + 1980;
-        if(!temp.includes(rand.toString()))
-        temp.push(rand.toString())
-        if(temp.length==6)break;
+        let rand = Math.floor(Math.random() * 41) + 1980;
+        if (!temp.includes(rand.toString()))
+            temp.push(rand.toString())
+        if (temp.length == 6) break;
     }
     return temp;
+}
+function shuffleArray(array) { // Durstenfeld shuffle 
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array
 }
 
 /***************************************************
@@ -496,9 +538,10 @@ function Movie(movie) {
     this.rating = movie.vote_average || 'Not Available';
     this.poster = movie.poster_path ? "https://image.tmdb.org/t/p/w500" + movie.poster_path : '../img/default-poster.png'
     this.date = movie.release_date || 'Not Available';
+    this.cover = movie.backdrop_path || 'Not Available';
 
 }
-function Actor(actor){
+function Actor(actor) {
     this.name = actor.name;
     this.character = actor.character;
     this.poster = actor.profile_path ? ("https://image.tmdb.org/t/p/w500" + actor.profile_path) : '../img/default-poster.png'
@@ -507,9 +550,8 @@ function Actor(actor){
 
 client.connect().then((data) => {
     app.listen(PORT, () => {
-      console.log('the app is listening to ' + PORT);
+        console.log('the app is listening to ' + PORT);
     });
-  }).catch(error => {
+}).catch(error => {
     console.log('error in connect to database ' + error);
-  });
-  
+});

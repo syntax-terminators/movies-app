@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS questions;
 DROP TABLE IF EXISTS actors;
 DROP TABLE IF EXISTS movie;
-
+DROP TABLE IF EXISTS score;
 CREATE TABLE IF NOT EXISTS
 movie(
   id SERIAL PRIMARY KEY NOT NULL,
@@ -27,4 +27,10 @@ actors(
   image TEXT NOT NULL,
   name TEXT NOT NULL,
   moviesid int not null references movie(id)
+);
+
+CREATE TABLE IF NOT EXISTS
+score(
+  id SERIAL PRIMARY KEY NOT NULL,
+  score VARCHAR(255) NOT NULL
 );

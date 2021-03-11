@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>CodeFlix</title>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/styles.css">
@@ -16,9 +16,8 @@
     <%- include('../partial/header')%>
         <main>
             <%- include('../partial/aside')%>
-                <form class='quiz-form' action="/quiz/score" method="GET">
-                   
-                    
+
+                <!-- <form class='quiz-form' action="/quiz/score" method="GET">  
                     <% quizes.forEach((quiz,j)=> { %>
                         <% quiz.forEach((question, i)=> { %>
                             <div class="question-block">
@@ -26,27 +25,54 @@
                                     <%= question.header %>
                                 </h3>
                                 <br><br>
-                               
-
                                 <% question.choises.forEach(choice=> { %>
                                     <div class="choice-block">
                                         <input type="radio" name=<%=`question${i}${j}`%> value="<%= choice %>" required>
                                         &nbsp;
-                                        <label for="<% choice %>">
+                                        <label for="<%= choice %>">
                                             <%= choice %>
                                         </label>
                                         <br>
                                         <br>
                                     </div>
                                 <% }) %>
-                            
                             </div>
                             <br>
                         <% }) %>
                     <% }) %>
                     <input type="hidden" name="quizes" value="<%=JSON.stringify(quizes)%>">
-                    <input type="submit">
-                </form>
+                    <input type="submit"id="AddBtn">
+                </form> -->
+
+<!-- _____________________________________________________________________ -->
+
+
+            <form class='quiz-form' action="/quiz/score" method="GET">
+                    <% quizes.forEach((quiz,j)=> { %>
+                    <% quiz.forEach((question, i)=> { %>
+                <div class="container00">
+                    <h2 class="questionhead"><%= question.header %></h2>
+                  <ul class="ulquiz">
+                    <% question.choises.forEach((choice,f)=> { %>
+                  <li>
+                    <input id="<%= choice %><%= f %>" type="radio"  name=<%=`question${i}${j}`%> value="<%= choice %>" required>
+                    <label for="<%= choice %><%= f %>"><%= choice %></label>
+                    <div class="check"></div>
+                  </li>
+                  <% }) %>
+                </ul>
+                </div>
+                <% }) %>
+                <% }) %>
+                <input type="hidden" name="quizes" value="<%=JSON.stringify(quizes)%>">
+                <input type="submit"id="AddBtn">
+            </form>
+
+
+
+
+
+
         </main>
         <%- include('../partial/scripts') %>
         <script>
